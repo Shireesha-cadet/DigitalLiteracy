@@ -1,0 +1,2415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>DigiSakhi — Digital Literacy for Rural Women</title>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500;600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   CSS VARIABLES & RESET
+============================================================ */
+:root {
+  --ink:       #0f1923;
+  --ink-mid:   #4a5568;
+  --ink-soft:  #8896a5;
+  --ink-pale:  #c8d4df;
+  --bg:        #f0f4f0;
+  --white:     #ffffff;
+  --border:    #e2eae2;
+
+  --green:     #1e7e4a;
+  --green-2:   #27a85f;
+  --green-3:   #e6f7ed;
+  --green-4:   #b3e8c8;
+
+  --saffron:   #e07b00;
+  --saffron-2: #f5a623;
+  --saffron-3: #fff4e0;
+  --saffron-4: #ffd999;
+
+  --teal:      #0d7d8c;
+  --teal-2:    #11a3b5;
+  --teal-3:    #e0f5f8;
+
+  --rose:      #c0392b;
+  --rose-3:    #fdecea;
+
+  --blue:      #1557a0;
+  --blue-2:    #1976d2;
+  --blue-3:    #e3effa;
+
+  --violet:    #6b21a8;
+  --violet-3:  #f3e8ff;
+
+  --r:         18px;
+  --r-sm:      12px;
+  --r-xs:      8px;
+  --shadow:    0 2px 14px rgba(0,0,0,.07);
+  --shadow-md: 0 4px 24px rgba(0,0,0,.11);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.14);
+  --transition: all .22s cubic-bezier(.4,0,.2,1);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 15px; -webkit-text-size-adjust: 100%; }
+body {
+  font-family: 'Noto Sans', 'Noto Sans Devanagari', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+button:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+img { max-width: 100%; }
+a { text-decoration: none; color: inherit; }
+
+/* ============================================================
+   UTILITY
+============================================================ */
+.hidden { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+.flex { display: flex; }
+.flex-col { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.justify-center { justify-content: center; }
+.gap-8 { gap: 8px; }
+.gap-12 { gap: 12px; }
+.gap-16 { gap: 16px; }
+.text-center { text-align: center; }
+.fw-600 { font-weight: 600; }
+.fw-700 { font-weight: 700; }
+.fs-12 { font-size: 12px; }
+.fs-13 { font-size: 13px; }
+.fs-14 { font-size: 14px; }
+.col-green { color: var(--green); }
+.col-saffron { color: var(--saffron); }
+
+/* ============================================================
+   ANIMATION KEYFRAMES
+============================================================ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes popIn {
+  0%   { transform: scale(.85); opacity: 0; }
+  70%  { transform: scale(1.04); }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.05); }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.anim-fade-up  { animation: fadeUp .38s ease forwards; }
+.anim-fade-in  { animation: fadeIn .3s ease forwards; }
+.anim-slide-r  { animation: slideInRight .32s ease forwards; }
+.anim-pop      { animation: popIn .35s ease forwards; }
+.d1 { animation-delay: .04s; opacity: 0; }
+.d2 { animation-delay: .10s; opacity: 0; }
+.d3 { animation-delay: .16s; opacity: 0; }
+.d4 { animation-delay: .22s; opacity: 0; }
+.d5 { animation-delay: .28s; opacity: 0; }
+.d6 { animation-delay: .34s; opacity: 0; }
+
+/* ============================================================
+   TOASTER
+============================================================ */
+#toaster {
+  position: fixed; bottom: 76px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  pointer-events: none;
+}
+.toast {
+  background: var(--ink); color: #fff;
+  padding: 10px 20px; border-radius: 30px;
+  font-size: 13px; font-weight: 500;
+  box-shadow: var(--shadow-md);
+  animation: fadeUp .3s ease;
+  white-space: nowrap;
+}
+.toast.success { background: var(--green); }
+.toast.error   { background: var(--rose); }
+.toast.info    { background: var(--blue-2); }
+
+/* ============================================================
+   SCREENS
+============================================================ */
+.screen {
+  display: none;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.screen.active { display: flex; }
+
+/* ============================================================
+   ① SPLASH / LANGUAGE SCREEN
+============================================================ */
+#s-lang {
+  background: linear-gradient(160deg, #fff 0%, #eef7f1 50%, #d4eede 100%);
+  align-items: center;
+  justify-content: center;
+  padding: 32px 24px 40px;
+  min-height: 100vh;
+}
+.lang-brand {
+  margin-bottom: 36px;
+  text-align: center;
+  animation: fadeUp .5s ease;
+}
+.lang-logo {
+  width: 80px; height: 80px;
+  border-radius: 24px;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 8px 32px rgba(30,126,74,.3);
+}
+.lang-brand h1 {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 34px; font-weight: 800;
+  color: var(--green);
+  letter-spacing: -0.5px;
+}
+.lang-brand .tagline {
+  font-size: 14px; color: var(--ink-mid);
+  margin-top: 4px; line-height: 1.5;
+}
+.lang-welcome {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 20px 24px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  margin-bottom: 28px;
+  width: 100%; max-width: 360px;
+  animation: fadeUp .5s .1s ease both;
+}
+.lang-welcome .w-en {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 22px; font-weight: 700; color: var(--green);
+}
+.lang-welcome .w-hi {
+  font-family: 'Noto Sans Devanagari', sans-serif;
+  font-size: 20px; font-weight: 600; color: var(--saffron);
+  margin-top: 4px;
+}
+.lang-welcome .w-sub {
+  font-size: 12px; color: var(--ink-soft); margin-top: 6px;
+}
+.lang-cards {
+  display: flex; flex-direction: column; gap: 14px;
+  width: 100%; max-width: 360px;
+  animation: fadeUp .5s .18s ease both;
+}
+.lang-card {
+  background: var(--white);
+  border: 2.5px solid var(--border);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  display: flex; align-items: center; gap: 16px;
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+.lang-card::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: var(--green-3);
+  opacity: 0; transition: opacity .2s;
+}
+.lang-card:hover::before, .lang-card.sel::before { opacity: 1; }
+.lang-card.sel { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-4); }
+.lang-card-icon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  font-size: 26px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg);
+  flex-shrink: 0; position: relative; z-index: 1;
+  transition: var(--transition);
+}
+.lang-card.sel .lang-card-icon { background: var(--green-4); }
+.lang-card-text { position: relative; z-index: 1; }
+.lang-card-name { font-size: 18px; font-weight: 700; color: var(--ink); }
+.lang-card-native { font-size: 13px; color: var(--ink-mid); margin-top: 2px; }
+.lang-card-check {
+  margin-left: auto; position: relative; z-index: 1;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transform: scale(.5);
+  transition: var(--transition);
+}
+.lang-card.sel .lang-card-check { opacity: 1; transform: scale(1); }
+.lang-start-btn {
+  margin-top: 28px;
+  width: 100%; max-width: 360px;
+  background: var(--green);
+  color: #fff;
+  border-radius: var(--r);
+  padding: 17px 24px;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 18px; font-weight: 700;
+  box-shadow: 0 6px 24px rgba(30,126,74,.35);
+  transition: var(--transition);
+  animation: fadeUp .5s .26s ease both;
+}
+.lang-start-btn:hover { background: var(--green-2); transform: translateY(-1px); box-shadow: 0 8px 28px rgba(30,126,74,.4); }
+.lang-start-btn:active { transform: translateY(0); }
+
+/* ============================================================
+   APP SHELL
+============================================================ */
+#app-shell { flex-direction: column; }
+
+/* TOP NAV */
+.topnav {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 0 16px;
+  height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; z-index: 200;
+  box-shadow: 0 1px 8px rgba(0,0,0,.06);
+}
+.topnav-brand {
+  display: flex; align-items: center; gap: 8px;
+}
+.topnav-logo {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: var(--green);
+  display: flex; align-items: center; justify-content: center;
+}
+.topnav-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 18px; font-weight: 800; color: var(--green);
+}
+.topnav-actions { display: flex; align-items: center; gap: 8px; }
+.nav-pill {
+  height: 32px; border-radius: 20px;
+  padding: 0 14px;
+  font-size: 12px; font-weight: 700;
+  background: var(--green-3); color: var(--green);
+  border: 1.5px solid var(--green-4);
+  transition: var(--transition);
+  display: flex; align-items: center; gap: 5px;
+}
+.nav-pill:hover { background: var(--green-4); }
+.nav-icon-btn {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: transparent;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition);
+}
+.nav-icon-btn:hover { background: var(--bg); }
+
+/* BOTTOM TAB NAV */
+.bottomnav {
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--white);
+  border-top: 1px solid var(--border);
+  display: flex;
+  z-index: 200;
+  box-shadow: 0 -2px 16px rgba(0,0,0,.08);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.tab-btn {
+  flex: 1;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 3px;
+  padding: 9px 4px 11px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 10px; font-weight: 600;
+  transition: var(--transition);
+  position: relative;
+}
+.tab-btn::before {
+  content: '';
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 0; height: 3px;
+  background: var(--green);
+  border-radius: 0 0 4px 4px;
+  transition: width .22s ease;
+}
+.tab-btn.active { color: var(--green); }
+.tab-btn.active::before { width: 32px; }
+.tab-btn svg { transition: transform .22s ease; }
+.tab-btn.active svg { transform: scale(1.12); }
+.tab-dot {
+  position: absolute; top: 6px; right: calc(50% - 12px);
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--saffron-2);
+  border: 2px solid var(--white);
+  display: none;
+}
+.tab-dot.show { display: block; }
+
+/* SCROLL CONTAINER */
+.scroll-area {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 72px;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ============================================================
+   PAGE PANELS  (inside scroll-area)
+============================================================ */
+.panel { display: none; }
+.panel.active { display: block; }
+.page-pad { padding: 16px; max-width: 500px; margin: 0 auto; }
+
+/* ============================================================
+   HOME / DASHBOARD PANEL
+============================================================ */
+.hero-card {
+  background: linear-gradient(135deg, var(--green) 0%, var(--green-2) 100%);
+  border-radius: var(--r);
+  padding: 22px 20px 20px;
+  color: #fff;
+  margin-bottom: 16px;
+  position: relative; overflow: hidden;
+}
+.hero-card::after {
+  content: '';
+  position: absolute; right: -24px; top: -24px;
+  width: 110px; height: 110px; border-radius: 50%;
+  background: rgba(255,255,255,.1);
+}
+.hero-card::before {
+  content: '';
+  position: absolute; right: 16px; bottom: -16px;
+  width: 70px; height: 70px; border-radius: 50%;
+  background: rgba(255,255,255,.07);
+}
+.hero-greeting { font-size: 13px; opacity: .82; margin-bottom: 2px; }
+.hero-name {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 22px; font-weight: 800; margin-bottom: 16px;
+}
+.hero-prog-label { font-size: 11px; opacity: .75; margin-bottom: 6px; letter-spacing: .3px; }
+.hero-bar-bg {
+  height: 9px; background: rgba(255,255,255,.25);
+  border-radius: 8px; overflow: hidden; margin-bottom: 7px;
+}
+.hero-bar-fill {
+  height: 100%; border-radius: 8px;
+  background: var(--saffron-2);
+  transition: width .7s cubic-bezier(.4,0,.2,1);
+  position: relative;
+}
+.hero-bar-fill::after {
+  content: '';
+  position: absolute; right: 0; top: 0; bottom: 0;
+  width: 30px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.3));
+  border-radius: 8px;
+}
+.hero-pct {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 14px; font-weight: 700;
+}
+.hero-stats-row {
+  display: flex; gap: 10px; margin-top: 14px;
+}
+.hero-stat {
+  flex: 1;
+  background: rgba(255,255,255,.18);
+  border-radius: var(--r-sm);
+  padding: 10px 10px 8px;
+  text-align: center;
+}
+.hero-stat-val {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 20px; font-weight: 800; line-height: 1;
+}
+.hero-stat-lbl { font-size: 10px; opacity: .8; margin-top: 3px; }
+
+/* SECTION HEADER */
+.sec-hdr {
+  display: flex; align-items: center; justify-content: space-between;
+  margin: 18px 0 10px;
+}
+.sec-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 17px; font-weight: 700; color: var(--ink);
+}
+.sec-link {
+  font-size: 12px; color: var(--green); font-weight: 600;
+  background: none; border: none;
+}
+
+/* RECOMMENDED CARD */
+.rec-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: var(--shadow);
+  border: 1.5px solid var(--saffron-4);
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.rec-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.rec-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: var(--saffron-3);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.rec-badge { font-size: 10px; font-weight: 700; color: var(--saffron); letter-spacing: 1px; margin-bottom: 2px; }
+.rec-title { font-size: 14px; font-weight: 700; color: var(--ink); }
+.rec-sub   { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.rec-arrow { margin-left: auto; color: var(--ink-pale); flex-shrink: 0; }
+
+/* MODULE CARDS GRID */
+.mod-grid { display: flex; flex-direction: column; gap: 12px; }
+.mod-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+  box-shadow: var(--shadow);
+  border: 1.5px solid var(--border);
+  cursor: pointer;
+  transition: var(--transition);
+  position: relative; overflow: hidden;
+}
+.mod-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.mod-card.done  { border-color: var(--green-4); }
+.mod-card.locked{ opacity: .55; pointer-events: none; }
+.mod-card-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; font-size: 26px;
+  transition: var(--transition);
+}
+.mod-card:hover .mod-card-icon { transform: scale(1.08) rotate(-3deg); }
+.mod-card-body { flex: 1; min-width: 0; }
+.mod-card-title { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 3px; line-height: 1.3; }
+.mod-card-desc  { font-size: 12px; color: var(--ink-mid); line-height: 1.45; }
+.mod-card-meta  { display: flex; gap: 6px; margin-top: 7px; align-items: center; }
+.tag {
+  font-size: 10px; font-weight: 700; letter-spacing: .3px;
+  padding: 2px 8px; border-radius: 20px;
+}
+.tag-green  { background: var(--green-3);   color: var(--green); }
+.tag-saffron{ background: var(--saffron-3); color: var(--saffron); }
+.tag-teal   { background: var(--teal-3);    color: var(--teal); }
+.tag-blue   { background: var(--blue-3);    color: var(--blue); }
+.tag-violet { background: var(--violet-3);  color: var(--violet); }
+.mod-done-badge {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--green); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; box-shadow: 0 2px 8px rgba(30,126,74,.3);
+}
+.mod-next-badge {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+/* ============================================================
+   MODULE LESSON PANEL
+============================================================ */
+.lesson-topbar {
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 16px;
+  display: flex; align-items: center; gap: 10px;
+  position: sticky; top: 56px; z-index: 100;
+}
+.back-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: var(--transition);
+}
+.back-btn:hover { background: var(--border); }
+.lesson-title { font-size: 15px; font-weight: 700; flex: 1; line-height: 1.3; }
+.lesson-prog-pill {
+  font-size: 11px; font-weight: 700;
+  background: var(--green-3); color: var(--green);
+  padding: 4px 10px; border-radius: 20px; flex-shrink: 0;
+}
+
+/* LESSON STEPPER */
+.lesson-stepper {
+  display: flex; gap: 4px; padding: 12px 16px 0;
+  max-width: 500px; margin: 0 auto;
+}
+.stepper-dot {
+  flex: 1; height: 4px; border-radius: 4px;
+  background: var(--border);
+  transition: background .3s;
+}
+.stepper-dot.active  { background: var(--green-2); }
+.stepper-dot.done    { background: var(--green); }
+
+.lesson-body { padding: 16px; max-width: 500px; margin: 0 auto; }
+
+/* LESSON SLIDE */
+.lesson-slide {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 22px 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+}
+.slide-icon-wrap {
+  width: 64px; height: 64px; border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 32px; margin-bottom: 14px;
+}
+.slide-step-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+  color: var(--green); margin-bottom: 6px;
+}
+.slide-h {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 19px; font-weight: 800; color: var(--ink);
+  line-height: 1.25; margin-bottom: 10px;
+}
+.slide-body { font-size: 14px; color: var(--ink-mid); line-height: 1.7; }
+.highlight-box {
+  background: var(--green-3);
+  border-left: 3.5px solid var(--green);
+  border-radius: var(--r-xs);
+  padding: 12px 14px;
+  margin: 12px 0;
+  font-size: 13px; color: var(--ink); line-height: 1.6; font-weight: 500;
+}
+.tip-box {
+  background: var(--saffron-3);
+  border-left: 3.5px solid var(--saffron-2);
+  border-radius: var(--r-xs);
+  padding: 12px 14px;
+  margin: 12px 0;
+  font-size: 13px; color: var(--ink); line-height: 1.6;
+}
+.info-list { margin-top: 10px; display: flex; flex-direction: column; gap: 10px; }
+.info-item { display: flex; align-items: flex-start; gap: 10px; }
+.info-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--green); margin-top: 7px; flex-shrink: 0;
+}
+.info-text { font-size: 13.5px; color: var(--ink-mid); line-height: 1.55; }
+
+/* LESSON NAV */
+.lesson-nav {
+  display: flex; gap: 10px; padding-bottom: 20px;
+}
+.btn-primary {
+  flex: 1; padding: 14px;
+  background: var(--green); color: #fff;
+  border-radius: var(--r-sm);
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 15px; font-weight: 700;
+  transition: var(--transition);
+  box-shadow: 0 3px 14px rgba(30,126,74,.28);
+}
+.btn-primary:hover { background: var(--green-2); transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+.btn-secondary {
+  padding: 14px 20px;
+  background: var(--white); color: var(--ink-mid);
+  border-radius: var(--r-sm);
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 15px; font-weight: 600;
+  border: 2px solid var(--border);
+  transition: var(--transition);
+}
+.btn-secondary:hover { border-color: var(--ink-pale); background: var(--bg); }
+.btn-ghost {
+  flex: 1; padding: 14px;
+  background: var(--teal-3); color: var(--teal);
+  border-radius: var(--r-sm);
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 15px; font-weight: 700;
+  transition: var(--transition);
+}
+.btn-ghost:hover { background: #c5ebf0; }
+
+/* ============================================================
+   QUIZ PANEL
+============================================================ */
+.quiz-wrapper { padding: 16px; max-width: 500px; margin: 0 auto; }
+
+.quiz-header-card {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-2) 100%);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  color: #fff;
+  margin-bottom: 16px;
+}
+.quiz-h-title {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 18px; font-weight: 800; margin-bottom: 4px;
+}
+.quiz-h-sub { font-size: 12px; opacity: .8; margin-bottom: 14px; }
+.quiz-prog-row { display: flex; align-items: center; gap: 10px; }
+.quiz-prog-bg {
+  flex: 1; height: 7px; background: rgba(255,255,255,.25);
+  border-radius: 6px; overflow: hidden;
+}
+.quiz-prog-fill {
+  height: 100%; border-radius: 6px;
+  background: var(--saffron-2);
+  transition: width .4s ease;
+}
+.quiz-q-num { font-size: 12px; font-weight: 700; white-space: nowrap; }
+
+/* QUESTION CARD */
+.q-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 22px 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 14px;
+}
+.q-label {
+  font-size: 11px; font-weight: 700;
+  color: var(--teal); letter-spacing: 1.2px; margin-bottom: 8px;
+}
+.q-text {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 17px; font-weight: 700;
+  color: var(--ink); line-height: 1.4; margin-bottom: 18px;
+}
+.q-options { display: flex; flex-direction: column; gap: 10px; }
+.q-opt {
+  background: var(--bg);
+  border: 2px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 13px 16px;
+  display: flex; align-items: center; gap: 12px;
+  text-align: left;
+  font-size: 14px; font-weight: 500; color: var(--ink);
+  transition: var(--transition);
+  width: 100%;
+}
+.q-opt:hover:not(:disabled) { border-color: var(--teal-2); background: var(--teal-3); }
+.q-opt.chosen { border-color: var(--teal-2); background: var(--teal-3); color: var(--teal); }
+.q-opt.correct { border-color: var(--green); background: var(--green-3); color: var(--green); }
+.q-opt.wrong   { border-color: var(--rose);  background: var(--rose-3);  color: var(--rose); }
+.q-opt:disabled { cursor: default; }
+.opt-letter {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--white); border: 1.5px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; color: var(--ink-mid);
+  flex-shrink: 0; transition: var(--transition);
+}
+.q-opt.chosen .opt-letter  { background: var(--teal-2); border-color: var(--teal-2); color: #fff; }
+.q-opt.correct .opt-letter { background: var(--green);  border-color: var(--green);  color: #fff; }
+.q-opt.wrong   .opt-letter { background: var(--rose);   border-color: var(--rose);   color: #fff; }
+.feedback-row {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; border-radius: var(--r-xs);
+  margin-top: 10px; font-size: 13px; font-weight: 600;
+}
+.feedback-row.correct { background: var(--green-3); color: var(--green); }
+.feedback-row.wrong   { background: var(--rose-3);  color: var(--rose); }
+
+/* QUIZ NAV */
+.quiz-nav { display: flex; gap: 10px; }
+.btn-quiz-next {
+  flex: 1; padding: 14px;
+  background: var(--teal); color: #fff;
+  border-radius: var(--r-sm);
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 15px; font-weight: 700;
+  transition: var(--transition);
+  box-shadow: 0 3px 14px rgba(13,125,140,.25);
+}
+.btn-quiz-next:hover  { background: var(--teal-2); }
+.btn-quiz-next:disabled { opacity: .4; cursor: not-allowed; box-shadow: none; }
+
+/* SCORE SCREEN */
+.score-screen { padding: 16px; max-width: 500px; margin: 0 auto; }
+.score-card {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 16px;
+}
+.score-ring-wrap { margin: 0 auto 22px; position: relative; width: 120px; height: 120px; }
+.score-ring-wrap svg { transform: rotate(-90deg); }
+.score-ring-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.score-num {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 32px; font-weight: 800; color: var(--green); line-height: 1;
+}
+.score-of { font-size: 12px; color: var(--ink-soft); }
+.score-emoji { font-size: 44px; margin-bottom: 8px; }
+.score-verdict {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 22px; font-weight: 800; margin-bottom: 8px;
+}
+.score-message { font-size: 14px; color: var(--ink-mid); line-height: 1.6; margin-bottom: 18px; }
+.score-detail-row { display: flex; gap: 12px; margin-bottom: 20px; }
+.score-detail {
+  flex: 1;
+  background: var(--bg);
+  border-radius: var(--r-sm);
+  padding: 12px;
+  text-align: center;
+}
+.score-detail-num {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 22px; font-weight: 800;
+}
+.score-detail-lbl { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
+.score-rec-block {
+  background: var(--saffron-3);
+  border: 1.5px solid var(--saffron-4);
+  border-radius: var(--r-sm);
+  padding: 14px 16px;
+  display: flex; align-items: center; gap: 12px;
+  text-align: left; margin-bottom: 18px;
+}
+.score-rec-icon {
+  width: 40px; height: 40px; border-radius: 11px;
+  background: var(--saffron-4);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.score-rec-lbl { font-size: 10px; font-weight: 700; color: var(--saffron); letter-spacing: 1px; margin-bottom: 2px; }
+.score-rec-title { font-size: 13px; font-weight: 700; color: var(--ink); }
+.score-btns { display: flex; flex-direction: column; gap: 10px; }
+.btn-retake {
+  padding: 14px;
+  background: var(--teal-3); color: var(--teal);
+  border-radius: var(--r-sm);
+  font-family: 'Baloo 2', sans-serif; font-size: 15px; font-weight: 700;
+  transition: var(--transition);
+}
+.btn-retake:hover { background: #c0e8ee; }
+.btn-home {
+  padding: 14px;
+  background: var(--bg); color: var(--ink-mid);
+  border-radius: var(--r-sm);
+  font-family: 'Baloo 2', sans-serif; font-size: 15px; font-weight: 600;
+  border: 2px solid var(--border);
+  transition: var(--transition);
+}
+
+/* ============================================================
+   PROGRESS PANEL
+============================================================ */
+.prog-content { padding: 16px; max-width: 500px; margin: 0 auto; }
+
+.prog-overview {
+  background: var(--white);
+  border-radius: var(--r);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 16px;
+}
+.prog-ov-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+.prog-ov-label { font-size: 13px; color: var(--ink-mid); font-weight: 500; }
+.prog-ov-pct {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 34px; font-weight: 800; color: var(--green); line-height: 1;
+}
+.prog-big-bar {
+  height: 13px; background: var(--bg);
+  border-radius: 8px; overflow: hidden; margin-bottom: 12px;
+}
+.prog-big-fill {
+  height: 100%; border-radius: 8px;
+  background: linear-gradient(90deg, var(--green) 0%, var(--green-2) 100%);
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+  position: relative;
+}
+.prog-big-fill::after {
+  content: '';
+  position: absolute; top: 0; right: 0; bottom: 0;
+  width: 40px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.35));
+}
+.prog-stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
+.prog-stat-box {
+  background: var(--bg); border-radius: var(--r-sm);
+  padding: 10px; text-align: center;
+}
+.prog-stat-val {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 22px; font-weight: 800;
+}
+.prog-stat-lbl { font-size: 10px; color: var(--ink-soft); margin-top: 2px; }
+
+/* MODULE PROGRESS LIST */
+.mod-prog-list { display: flex; flex-direction: column; gap: 10px; }
+.mod-prog-row {
+  background: var(--white); border-radius: var(--r-sm);
+  padding: 14px 16px; box-shadow: var(--shadow);
+  display: flex; align-items: center; gap: 12px;
+}
+.mprog-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.mprog-body { flex: 1; min-width: 0; }
+.mprog-name { font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+.mprog-bar-bg { height: 5px; background: var(--bg); border-radius: 4px; overflow: hidden; }
+.mprog-bar-fill { height: 100%; border-radius: 4px; transition: width .6s; }
+.mprog-status { font-size: 11px; font-weight: 700; flex-shrink: 0; }
+
+/* BADGES */
+.badges-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 4px; }
+.badge-card {
+  background: var(--white); border-radius: var(--r-sm);
+  padding: 14px 10px; text-align: center;
+  box-shadow: var(--shadow);
+  border: 2px solid transparent;
+  transition: var(--transition);
+}
+.badge-card.earned { border-color: var(--saffron-4); }
+.badge-card.locked { opacity: .4; }
+.badge-emoji { font-size: 30px; margin-bottom: 6px; }
+.badge-name { font-size: 11px; font-weight: 700; }
+.badge-sub  { font-size: 10px; color: var(--ink-soft); margin-top: 2px; }
+
+/* QUIZ HISTORY */
+.quiz-hist-list { display: flex; flex-direction: column; gap: 8px; }
+.qh-row {
+  background: var(--white); border-radius: var(--r-sm);
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow);
+}
+.qh-icon {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.qh-name { font-size: 13px; font-weight: 600; flex: 1; }
+.qh-pill {
+  font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+}
+.qh-pill.hi { background: var(--green-3); color: var(--green); }
+.qh-pill.lo { background: var(--rose-3);  color: var(--rose); }
+.qh-pill.md { background: var(--saffron-3); color: var(--saffron); }
+
+/* ============================================================
+   ADMIN DASHBOARD PANEL
+============================================================ */
+.dash-content { padding: 16px; max-width: 500px; margin: 0 auto; }
+
+.dash-banner {
+  background: linear-gradient(135deg, var(--blue) 0%, var(--blue-2) 100%);
+  border-radius: var(--r);
+  padding: 18px 20px;
+  color: #fff; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 14px;
+}
+.dash-banner-icon {
+  width: 48px; height: 48px; border-radius: 14px;
+  background: rgba(255,255,255,.18);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px; flex-shrink: 0;
+}
+.dash-banner-title { font-family: 'Baloo 2', sans-serif; font-size: 18px; font-weight: 800; }
+.dash-banner-sub { font-size: 12px; opacity: .8; margin-top: 2px; }
+.dash-banner-badge {
+  margin-left: auto;
+  background: rgba(255,255,255,.2);
+  border-radius: 20px; padding: 4px 12px;
+  font-size: 11px; font-weight: 700;
+  flex-shrink: 0;
+}
+
+/* KPI GRID */
+.kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+.kpi-card {
+  background: var(--white); border-radius: var(--r);
+  padding: 18px 16px; box-shadow: var(--shadow);
+  position: relative; overflow: hidden;
+}
+.kpi-card::after {
+  content: '';
+  position: absolute; right: -10px; bottom: -10px;
+  width: 50px; height: 50px; border-radius: 50%;
+  opacity: .06;
+}
+.kpi-card.g::after  { background: var(--green); width: 60px; height: 60px; }
+.kpi-card.s::after  { background: var(--saffron); }
+.kpi-card.t::after  { background: var(--teal); }
+.kpi-card.b::after  { background: var(--blue-2); }
+.kpi-icon { font-size: 22px; margin-bottom: 8px; }
+.kpi-label { font-size: 11px; color: var(--ink-soft); font-weight: 600; letter-spacing: .3px; margin-bottom: 4px; }
+.kpi-val {
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 26px; font-weight: 800; line-height: 1; margin-bottom: 5px;
+}
+.kpi-trend { font-size: 11px; font-weight: 700; }
+.kpi-trend.up   { color: var(--green); }
+.kpi-trend.down { color: var(--rose); }
+.kpi-trend.flat { color: var(--saffron); }
+
+/* BAR CHART */
+.chart-card {
+  background: var(--white); border-radius: var(--r);
+  padding: 18px 16px; box-shadow: var(--shadow); margin-bottom: 12px;
+}
+.chart-title { font-family: 'Baloo 2', sans-serif; font-size: 15px; font-weight: 700; margin-bottom: 14px; }
+.bar-chart { display: flex; flex-direction: column; gap: 12px; }
+.bar-row { display: flex; align-items: center; gap: 10px; }
+.bar-lbl { font-size: 12px; font-weight: 500; color: var(--ink-mid); width: 80px; flex-shrink: 0; text-align: right; }
+.bar-track {
+  flex: 1; height: 9px; background: var(--bg);
+  border-radius: 6px; overflow: hidden;
+}
+.bar-fill { height: 100%; border-radius: 6px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+.bar-val { font-size: 12px; font-weight: 700; color: var(--ink); width: 34px; }
+
+/* RING CHART */
+.rings-row { display: flex; gap: 12px; justify-content: space-around; padding: 8px 0 4px; }
+.ring-item { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.ring-item svg { transform: rotate(-90deg); }
+.ring-label { font-size: 11px; font-weight: 600; color: var(--ink-mid); text-align: center; max-width: 60px; }
+
+/* RECENT ACTIVITY */
+.activity-list { display: flex; flex-direction: column; gap: 8px; }
+.activity-row {
+  background: var(--white); border-radius: var(--r-sm);
+  padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  box-shadow: var(--shadow);
+}
+.act-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: var(--green-3);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Baloo 2', sans-serif;
+  font-size: 14px; font-weight: 800; color: var(--green);
+  flex-shrink: 0;
+}
+.act-body { flex: 1; }
+.act-name { font-size: 13px; font-weight: 700; }
+.act-detail { font-size: 11px; color: var(--ink-soft); margin-top: 1px; }
+.act-score {
+  font-size: 12px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+  flex-shrink: 0;
+}
+
+/* ACCESSIBILITY CARD */
+.access-card {
+  background: var(--white); border-radius: var(--r);
+  padding: 18px 16px; box-shadow: var(--shadow);
+}
+.access-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+.access-item {
+  background: var(--bg); border-radius: var(--r-sm);
+  padding: 12px 12px;
+  display: flex; align-items: center; gap: 10px;
+}
+.access-icon {
+  width: 34px; height: 34px; border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 17px; flex-shrink: 0;
+}
+.access-text { font-size: 12px; font-weight: 600; color: var(--ink); line-height: 1.35; }
+
+/* ============================================================
+   RESPONSIVE
+============================================================ */
+@media (max-width: 380px) {
+  .hero-name { font-size: 19px; }
+  .kpi-val { font-size: 22px; }
+  .bar-lbl { width: 68px; font-size: 11px; }
+}
+@media (min-width: 500px) {
+  .page-pad, .lesson-body, .quiz-wrapper,
+  .prog-content, .dash-content, .score-screen { max-width: 480px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOASTER -->
+<div id="toaster" aria-live="polite"></div>
+
+<!-- ============================================================
+     LANGUAGE SCREEN
+============================================================ -->
+<div id="s-lang" class="screen active" role="main">
+  <div class="lang-brand">
+    <div class="lang-logo">
+      <svg width="46" height="46" viewBox="0 0 46 46" fill="none" aria-hidden="true">
+        <circle cx="23" cy="23" r="18" stroke="#fff" stroke-width="2.5"/>
+        <path d="M23 5c0 0-8 9-8 18s8 18 8 18M23 5c0 0 8 9 8 18S23 41 23 41" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        <path d="M5 23h36" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>DigiSakhi</h1>
+    <p class="tagline">Digital literacy for rural women entrepreneurs<br>ग्रामीण महिला उद्यमियों के लिए डिजिटल शिक्षा</p>
+  </div>
+
+  <div class="lang-welcome" role="region" aria-label="Welcome message">
+    <div class="w-en">🙏 Welcome!</div>
+    <div class="w-hi">स्वागत है!</div>
+    <div class="w-sub">Choose your language to begin • अपनी भाषा चुनें</div>
+  </div>
+
+  <div class="lang-cards" role="group" aria-label="Language selection">
+    <button class="lang-card sel" id="lc-en" onclick="selectLang('en')" aria-pressed="true">
+      <div class="lang-card-icon" aria-hidden="true">🇬🇧</div>
+      <div class="lang-card-text">
+        <div class="lang-card-name">English</div>
+        <div class="lang-card-native">Learn in English</div>
+      </div>
+      <div class="lang-card-check" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </button>
+    <button class="lang-card" id="lc-hi" onclick="selectLang('hi')" aria-pressed="false">
+      <div class="lang-card-icon" aria-hidden="true">🇮🇳</div>
+      <div class="lang-card-text">
+        <div class="lang-card-name">हिन्दी</div>
+        <div class="lang-card-native">हिंदी में सीखें</div>
+      </div>
+      <div class="lang-card-check" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </button>
+    <button class="lang-card" id="lc-te" onclick="selectLang('te')" aria-pressed="false">
+      <div class="lang-card-icon" aria-hidden="true">🌸</div>
+      <div class="lang-card-text">
+        <div class="lang-card-name">తెలుగు</div>
+        <div class="lang-card-native">తెలుగులో నేర్చుకోండి</div>
+      </div>
+      <div class="lang-card-check" aria-hidden="true">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </button>
+  </div>
+
+  <button class="lang-start-btn" id="lang-start-btn" onclick="launchApp()" aria-label="Start learning">
+    Begin Learning →
+  </button>
+</div>
+
+<!-- ============================================================
+     APP SHELL
+============================================================ -->
+<div id="s-app" class="screen" role="application">
+
+  <!-- TOP NAV -->
+  <header class="topnav" role="banner">
+    <div class="topnav-brand">
+      <div class="topnav-logo" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="7" stroke="#fff" stroke-width="1.8"/>
+          <path d="M9 2c0 0 3 3.5 3 7S9 16 9 16M9 2c0 0-3 3.5-3 7s3 7 3 7M2 9h14" stroke="#fff" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="topnav-title">DigiSakhi</span>
+    </div>
+    <div class="topnav-actions">
+      <button class="nav-pill" onclick="cycleLang()" id="lang-pill" aria-label="Change language">
+        <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.5"/><path d="M6.5 1s-2.5 2.5-2.5 5.5 2.5 5.5 2.5 5.5M6.5 1s2.5 2.5 2.5 5.5-2.5 5.5-2.5 5.5M1 6.5h11" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span id="lang-pill-txt">EN</span>
+      </button>
+      <button class="nav-icon-btn" onclick="gotoPanel('dash')" aria-label="Admin dashboard" title="Admin">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><rect x="3" y="3" width="6" height="6" rx="1.5" stroke="#4a5568" stroke-width="1.6"/><rect x="11" y="3" width="6" height="6" rx="1.5" stroke="#4a5568" stroke-width="1.6"/><rect x="3" y="11" width="6" height="6" rx="1.5" stroke="#4a5568" stroke-width="1.6"/><rect x="11" y="11" width="6" height="6" rx="1.5" stroke="#4a5568" stroke-width="1.6"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- SCROLL AREA -->
+  <div class="scroll-area" id="scroll-area">
+
+    <!-- ── HOME PANEL ── -->
+    <div id="panel-home" class="panel active" role="main">
+      <div class="page-pad">
+
+        <!-- Hero -->
+        <div class="hero-card anim-fade-up d1">
+          <div class="hero-greeting" id="h-greeting">Good morning,</div>
+          <div class="hero-name" id="h-name">Priya 👋</div>
+          <div class="hero-prog-label" id="h-prog-lbl">Overall progress</div>
+          <div class="hero-bar-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="hero-progbar">
+            <div class="hero-bar-fill" id="hero-bar-fill" style="width:0%"></div>
+          </div>
+          <div class="hero-pct" id="hero-pct">0% complete</div>
+          <div class="hero-stats-row">
+            <div class="hero-stat">
+              <div class="hero-stat-val" id="hs-done">0</div>
+              <div class="hero-stat-lbl" id="hs-done-lbl">Modules Done</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val" id="hs-streak">0</div>
+              <div class="hero-stat-lbl" id="hs-streak-lbl">Day Streak 🔥</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-val" id="hs-quiz">—</div>
+              <div class="hero-stat-lbl" id="hs-quiz-lbl">Quiz Score</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recommended -->
+        <div id="rec-section" class="hidden">
+          <div class="sec-hdr anim-fade-up d2">
+            <span class="sec-title" id="rec-sec-title">⭐ Recommended</span>
+          </div>
+          <div class="rec-card anim-fade-up d2" id="rec-card" onclick="openRecommended()" role="button" tabindex="0" aria-label="Open recommended lesson">
+            <div class="rec-icon" id="rec-icon" aria-hidden="true">💡</div>
+            <div>
+              <div class="rec-badge" id="rec-badge">AI SUGGESTED</div>
+              <div class="rec-title" id="rec-title">Module Name</div>
+              <div class="rec-sub" id="rec-sub">Based on your progress</div>
+            </div>
+            <div class="rec-arrow" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M7 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modules -->
+        <div class="sec-hdr anim-fade-up d3">
+          <span class="sec-title" id="mods-sec-title">📚 Learning Modules</span>
+          <button class="sec-link" onclick="gotoPanel('progress')" id="see-all-btn">See all</button>
+        </div>
+        <div class="mod-grid" id="mod-grid" role="list">
+          <!-- rendered by JS -->
+        </div>
+
+      </div>
+    </div><!-- /panel-home -->
+
+    <!-- ── LESSON PANEL ── -->
+    <div id="panel-lesson" class="panel">
+      <div class="lesson-topbar">
+        <button class="back-btn" onclick="backFromLesson()" aria-label="Go back">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M13 4l-6 6 6 6" stroke="#4a5568" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="lesson-title" id="lesson-title">Module Title</div>
+        <div class="lesson-prog-pill" id="lesson-prog-pill">1/3</div>
+      </div>
+      <div class="lesson-stepper" id="lesson-stepper" aria-label="Lesson progress"></div>
+      <div class="lesson-body" id="lesson-body"></div>
+    </div><!-- /panel-lesson -->
+
+    <!-- ── QUIZ PANEL ── -->
+    <div id="panel-quiz" class="panel">
+      <!-- quiz content rendered by JS -->
+    </div>
+
+    <!-- ── PROGRESS PANEL ── -->
+    <div id="panel-progress" class="panel">
+      <div class="prog-content">
+        <div class="sec-hdr" style="margin-top:8px;">
+          <span class="sec-title" id="prog-panel-title">📊 My Progress</span>
+        </div>
+
+        <div class="prog-overview anim-fade-up d1">
+          <div class="prog-ov-top">
+            <div>
+              <div class="prog-ov-label" id="prog-ov-lbl">Overall Completion</div>
+            </div>
+            <div class="prog-ov-pct" id="prog-ov-pct">0%</div>
+          </div>
+          <div class="prog-big-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="prog-bigbar">
+            <div class="prog-big-fill" id="prog-big-fill" style="width:0%"></div>
+          </div>
+          <div class="prog-stats-row">
+            <div class="prog-stat-box">
+              <div class="prog-stat-val" id="pstat-done">0</div>
+              <div class="prog-stat-lbl" id="pstat-done-lbl">Completed</div>
+            </div>
+            <div class="prog-stat-box">
+              <div class="prog-stat-val" id="pstat-left">4</div>
+              <div class="prog-stat-lbl" id="pstat-left-lbl">Remaining</div>
+            </div>
+            <div class="prog-stat-box">
+              <div class="prog-stat-val" id="pstat-score">—</div>
+              <div class="prog-stat-lbl" id="pstat-score-lbl">Best Score</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="sec-hdr anim-fade-up d2"><span class="sec-title" id="mod-prog-title">Module Details</span></div>
+        <div class="mod-prog-list anim-fade-up d2" id="mod-prog-list"></div>
+
+        <div class="sec-hdr anim-fade-up d3" style="margin-top:20px;"><span class="sec-title" id="badges-title">🏅 Achievements</span></div>
+        <div class="badges-grid anim-fade-up d3" id="badges-grid"></div>
+
+        <div class="sec-hdr anim-fade-up d4" style="margin-top:20px;"><span class="sec-title" id="qhist-title">📋 Quiz History</span></div>
+        <div class="quiz-hist-list anim-fade-up d4" id="quiz-hist-list">
+          <div style="text-align:center;padding:20px;color:var(--ink-soft);font-size:13px;" id="qhist-empty">No quizzes taken yet</div>
+        </div>
+
+      </div>
+    </div><!-- /panel-progress -->
+
+    <!-- ── DASHBOARD PANEL ── -->
+    <div id="panel-dash" class="panel">
+      <div class="dash-content">
+
+        <div class="dash-banner anim-fade-up d1">
+          <div class="dash-banner-icon" aria-hidden="true">📊</div>
+          <div>
+            <div class="dash-banner-title" id="dash-title">Admin Dashboard</div>
+            <div class="dash-banner-sub" id="dash-sub">Platform engagement overview</div>
+          </div>
+          <div class="dash-banner-badge" id="dash-live-badge">LIVE</div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid anim-fade-up d2">
+          <div class="kpi-card g">
+            <div class="kpi-icon" aria-hidden="true">👩‍💼</div>
+            <div class="kpi-label" id="kpi-enrolled-lbl">TOTAL ENROLLED</div>
+            <div class="kpi-val" id="kpi-enrolled">2,847</div>
+            <div class="kpi-trend up" id="kpi-enrolled-trend">↑ +12% this week</div>
+          </div>
+          <div class="kpi-card s">
+            <div class="kpi-icon" aria-hidden="true">✅</div>
+            <div class="kpi-label" id="kpi-mods-lbl">MODULES DONE</div>
+            <div class="kpi-val" id="kpi-mods">7,193</div>
+            <div class="kpi-trend up" id="kpi-mods-trend">↑ +8% this week</div>
+          </div>
+          <div class="kpi-card t">
+            <div class="kpi-icon" aria-hidden="true">🎯</div>
+            <div class="kpi-label" id="kpi-score-lbl">AVG QUIZ SCORE</div>
+            <div class="kpi-val" id="kpi-score">74%</div>
+            <div class="kpi-trend flat" id="kpi-score-trend">→ Stable</div>
+          </div>
+          <div class="kpi-card b">
+            <div class="kpi-icon" aria-hidden="true">📈</div>
+            <div class="kpi-label" id="kpi-rate-lbl">COMPLETION RATE</div>
+            <div class="kpi-val" id="kpi-rate">63%</div>
+            <div class="kpi-trend up" id="kpi-rate-trend">↑ +5% this month</div>
+          </div>
+        </div>
+
+        <!-- Bar Chart: Module Engagement -->
+        <div class="chart-card anim-fade-up d3">
+          <div class="chart-title" id="chart-mod-title">📚 Module Engagement</div>
+          <div class="bar-chart" id="bar-chart-mods" role="img" aria-label="Module engagement bar chart"></div>
+        </div>
+
+        <!-- Progress Rings -->
+        <div class="chart-card anim-fade-up d4">
+          <div class="chart-title" id="chart-ring-title">🔵 Completion Breakdown</div>
+          <div class="rings-row" id="rings-row" role="img" aria-label="Completion rings chart"></div>
+        </div>
+
+        <!-- Recent Activity -->
+        <div class="sec-hdr anim-fade-up d5"><span class="sec-title" id="dash-activity-title">🕐 Recent Activity</span></div>
+        <div class="activity-list anim-fade-up d5" id="activity-list"></div>
+
+        <!-- Accessibility Card -->
+        <div class="access-card anim-fade-up d6" style="margin-top:16px;">
+          <div class="chart-title" id="access-title">♿ Usability & Accessibility</div>
+          <div class="access-grid" id="access-grid"></div>
+        </div>
+
+      </div>
+    </div><!-- /panel-dash -->
+
+  </div><!-- /scroll-area -->
+
+  <!-- BOTTOM TAB NAV -->
+  <nav class="bottomnav" role="navigation" aria-label="Main navigation">
+    <button class="tab-btn active" id="tab-home" onclick="gotoPanel('home')" aria-label="Home" aria-current="page">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><path d="M3 9.5L11 3l8 6.5V19a1 1 0 01-1 1H14v-5H8v5H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+      <span id="tabl-home">Home</span>
+    </button>
+    <button class="tab-btn" id="tab-quiz" onclick="startQuizFromNav()" aria-label="Quiz">
+      <div class="tab-dot" id="quiz-dot"></div>
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.8"/><path d="M8.5 8.5a2.5 2.5 0 115 0c0 2-2.5 2.5-2.5 4.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="11" cy="16.5" r="1" fill="currentColor"/></svg>
+      <span id="tabl-quiz">Quiz</span>
+    </button>
+    <button class="tab-btn" id="tab-progress" onclick="gotoPanel('progress')" aria-label="Progress">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="3" y="15" width="4" height="4" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="9" y="10" width="4" height="9" rx="1" stroke="currentColor" stroke-width="1.8"/><rect x="15" y="5" width="4" height="14" rx="1" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span id="tabl-progress">Progress</span>
+    </button>
+    <button class="tab-btn" id="tab-dash" onclick="gotoPanel('dash')" aria-label="Dashboard">
+      <svg width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="12" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="3" y="12" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/><rect x="12" y="12" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="1.8"/></svg>
+      <span id="tabl-dash">Dashboard</span>
+    </button>
+  </nav>
+
+</div><!-- /s-app -->
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+"use strict";
+
+/* ============================================================
+   TRANSLATIONS
+============================================================ */
+const LANG = {
+  en: {
+    start_btn: "Begin Learning →",
+    greeting: "Good morning,",
+    prog_label: "Overall progress",
+    complete: "complete",
+    modules_done: "Modules Done",
+    day_streak: "Day Streak 🔥",
+    quiz_score: "Quiz Score",
+    recommended: "⭐ Recommended for You",
+    ai_badge: "AI SUGGESTED",
+    based_progress: "Based on your progress",
+    modules_title: "📚 Learning Modules",
+    see_all: "See all",
+    tab_home: "Home", tab_quiz: "Quiz", tab_progress: "Progress", tab_dash: "Dashboard",
+    back: "Back",
+    take_quiz: "Take Quiz →",
+    next_slide: "Next →",
+    mark_done: "✓ Mark as Complete",
+    already_done: "✓ Completed",
+    next_module: "Next Module →",
+    prev: "← Back",
+    submit_quiz: "Submit Quiz",
+    next_q: "Next →",
+    retake: "Retake Quiz",
+    go_home: "Back to Home",
+    well_done: "Well Done! 🎉",
+    keep_going: "Keep Going! 💪",
+    try_again: "Keep Learning! 📚",
+    score_high: "Excellent! You have a great understanding of digital tools.",
+    score_mid: "Good effort! Review the module and try again.",
+    score_low: "Keep learning! Complete the modules and retake the quiz.",
+    next_lesson: "NEXT LESSON",
+    repeat_lesson: "REPEAT LESSON",
+    prog_panel: "📊 My Progress",
+    overall_comp: "Overall Completion",
+    completed: "Completed",
+    remaining: "Remaining",
+    best_score: "Best Score",
+    mod_details: "Module Details",
+    achievements: "🏅 Achievements",
+    quiz_history: "📋 Quiz History",
+    no_quiz: "No quizzes taken yet",
+    dash_title: "Admin Dashboard",
+    dash_sub: "Platform engagement overview",
+    dash_live: "LIVE",
+    kpi_enrolled: "TOTAL ENROLLED",
+    kpi_mods: "MODULES DONE",
+    kpi_score: "AVG QUIZ SCORE",
+    kpi_rate: "COMPLETION RATE",
+    chart_mod: "📚 Module Engagement",
+    chart_ring: "🔵 Completion Breakdown",
+    activity_title: "🕐 Recent Activity",
+    access_title: "♿ Usability & Accessibility",
+    badge_first: "First Step",
+    badge_half: "Halfway!",
+    badge_all: "Champion!",
+    badge_quiz: "Quiz Star",
+    badge_earned: "Earned",
+    badge_locked: "Locked",
+    min: "min",
+    beginner: "Beginner",
+    essential: "Essential",
+    intermediate: "Intermediate",
+    important: "Important",
+    feedback_correct: "✓ Correct! Well done.",
+    feedback_wrong: "✗ Incorrect. The right answer is highlighted.",
+    ring_comp: "Completed",
+    ring_prog: "In Progress",
+    ring_none: "Not Started",
+  },
+  hi: {
+    start_btn: "सीखना शुरू करें →",
+    greeting: "सुप्रभात,",
+    prog_label: "कुल प्रगति",
+    complete: "पूर्ण",
+    modules_done: "मॉड्यूल पूर्ण",
+    day_streak: "दिन की लय 🔥",
+    quiz_score: "क्विज़ स्कोर",
+    recommended: "⭐ आपके लिए सुझाव",
+    ai_badge: "AI सुझाव",
+    based_progress: "आपकी प्रगति के आधार पर",
+    modules_title: "📚 सीखने के मॉड्यूल",
+    see_all: "सभी देखें",
+    tab_home: "होम", tab_quiz: "क्विज़", tab_progress: "प्रगति", tab_dash: "डैशबोर्ड",
+    back: "वापस",
+    take_quiz: "क्विज़ लें →",
+    next_slide: "अगला →",
+    mark_done: "✓ पूर्ण करें",
+    already_done: "✓ पूर्ण हुआ",
+    next_module: "अगला मॉड्यूल →",
+    prev: "← वापस",
+    submit_quiz: "क्विज़ जमा करें",
+    next_q: "अगला →",
+    retake: "दोबारा क्विज़",
+    go_home: "होम पर जाएं",
+    well_done: "बहुत अच्छा! 🎉",
+    keep_going: "जारी रखें! 💪",
+    try_again: "सीखते रहें! 📚",
+    score_high: "शानदार! डिजिटल टूल्स पर बेहतरीन समझ।",
+    score_mid: "अच्छा प्रयास! मॉड्यूल दोबारा पढ़ें और कोशिश करें।",
+    score_low: "सीखते रहें! मॉड्यूल पूरे करें और क्विज़ दें।",
+    next_lesson: "अगला पाठ",
+    repeat_lesson: "दोबारा पढ़ें",
+    prog_panel: "📊 मेरी प्रगति",
+    overall_comp: "कुल पूर्णता",
+    completed: "पूर्ण",
+    remaining: "बाकी",
+    best_score: "सर्वश्रेष्ठ स्कोर",
+    mod_details: "मॉड्यूल विवरण",
+    achievements: "🏅 उपलब्धियाँ",
+    quiz_history: "📋 क्विज़ इतिहास",
+    no_quiz: "अभी कोई क्विज़ नहीं दिया",
+    dash_title: "एडमिन डैशबोर्ड",
+    dash_sub: "प्लेटफ़ॉर्म सहभागिता अवलोकन",
+    dash_live: "लाइव",
+    kpi_enrolled: "कुल नामांकित",
+    kpi_mods: "मॉड्यूल पूर्ण",
+    kpi_score: "औसत क्विज़ स्कोर",
+    kpi_rate: "पूर्णता दर",
+    chart_mod: "📚 मॉड्यूल सहभागिता",
+    chart_ring: "🔵 पूर्णता विवरण",
+    activity_title: "🕐 हाल की गतिविधि",
+    access_title: "♿ उपयोगिता और पहुँच",
+    badge_first: "पहला कदम",
+    badge_half: "आधा रास्ता!",
+    badge_all: "चैम्पियन!",
+    badge_quiz: "क्विज़ स्टार",
+    badge_earned: "अर्जित",
+    badge_locked: "बंद",
+    min: "मिनट",
+    beginner: "शुरुआती",
+    essential: "ज़रूरी",
+    intermediate: "मध्यम",
+    important: "महत्वपूर्ण",
+    feedback_correct: "✓ सही! बहुत अच्छा।",
+    feedback_wrong: "✗ गलत। सही उत्तर दिखाया गया है।",
+    ring_comp: "पूर्ण",
+    ring_prog: "जारी है",
+    ring_none: "शुरू नहीं",
+  },
+  te: {
+    start_btn: "నేర్చుకోవడం ప్రారంభించండి →",
+    greeting: "శుభోదయం,",
+    prog_label: "మొత్తం పురోగతి",
+    complete: "పూర్తి",
+    modules_done: "మాడ్యూళ్లు పూర్తి",
+    day_streak: "రోజుల లెక్క 🔥",
+    quiz_score: "క్విజ్ స్కోర్",
+    recommended: "⭐ మీకు సూచన",
+    ai_badge: "AI సూచన",
+    based_progress: "మీ పురోగతి ఆధారంగా",
+    modules_title: "📚 అభ్యాస మాడ్యూళ్లు",
+    see_all: "అన్నీ చూడండి",
+    tab_home: "హోమ్", tab_quiz: "క్విజ్", tab_progress: "పురోగతి", tab_dash: "డాష్‌బోర్డ్",
+    back: "వెనక్కి",
+    take_quiz: "క్విజ్ తీసుకోండి →",
+    next_slide: "తదుపరి →",
+    mark_done: "✓ పూర్తి చేయండి",
+    already_done: "✓ పూర్తయింది",
+    next_module: "తదుపరి మాడ్యూల్ →",
+    prev: "← వెనక్కి",
+    submit_quiz: "క్విజ్ సమర్పించండి",
+    next_q: "తదుపరి →",
+    retake: "క్విజ్ మళ్ళీ చేయండి",
+    go_home: "హోమ్‌కు వెళ్ళండి",
+    well_done: "చాలా బాగుంది! 🎉",
+    keep_going: "కొనసాగించండి! 💪",
+    try_again: "నేర్చుకోండి! 📚",
+    score_high: "అద్భుతం! డిజిటల్ సాధనాలపై అద్భుతమైన అవగాహన.",
+    score_mid: "మంచి ప్రయత్నం! మాడ్యూల్ సమీక్షించండి.",
+    score_low: "నేర్చుకోండి! మాడ్యూళ్లు పూర్తి చేసి క్విజ్ తీసుకోండి.",
+    next_lesson: "తదుపరి పాఠం",
+    repeat_lesson: "మళ్ళీ చదవండి",
+    prog_panel: "📊 నా పురోగతి",
+    overall_comp: "మొత్తం పూర్తి",
+    completed: "పూర్తయింది",
+    remaining: "మిగిలింది",
+    best_score: "అత్యుత్తమ స్కోర్",
+    mod_details: "మాడ్యూల్ వివరాలు",
+    achievements: "🏅 సాధనలు",
+    quiz_history: "📋 క్విజ్ చరిత్ర",
+    no_quiz: "ఇంకా క్విజ్ తీసుకోలేదు",
+    dash_title: "అడ్మిన్ డాష్‌బోర్డ్",
+    dash_sub: "ప్లాట్‌ఫారమ్ నిమగ్నత అవలోకనం",
+    dash_live: "లైవ్",
+    kpi_enrolled: "మొత్తం నమోదు",
+    kpi_mods: "మాడ్యూళ్లు పూర్తి",
+    kpi_score: "సగటు క్విజ్ స్కోర్",
+    kpi_rate: "పూర్తి రేటు",
+    chart_mod: "📚 మాడ్యూల్ నిమగ్నత",
+    chart_ring: "🔵 పూర్తి వివరాలు",
+    activity_title: "🕐 తాజా కార్యకలాపం",
+    access_title: "♿ వినియోగం & అందుబాటు",
+    badge_first: "మొదటి అడుగు",
+    badge_half: "సగం దారి!",
+    badge_all: "చాంపియన్!",
+    badge_quiz: "క్విజ్ స్టార్",
+    badge_earned: "సాధించారు",
+    badge_locked: "లాక్",
+    min: "నిమి",
+    beginner: "ప్రారంభికుడు",
+    essential: "అవసరమైనది",
+    intermediate: "మధ్యస్థ",
+    important: "ముఖ్యమైనది",
+    feedback_correct: "✓ సరైనది! చాలా బాగుంది.",
+    feedback_wrong: "✗ తప్పు. సరైన జవాబు చూపబడింది.",
+    ring_comp: "పూర్తయింది",
+    ring_prog: "జరుగుతోంది",
+    ring_none: "ప్రారంభం కాలేదు",
+  }
+};
+function t(k) { return (LANG[S.lang]||LANG.en)[k] || LANG.en[k] || k; }
+
+/* ============================================================
+   MODULE DATA
+============================================================ */
+const MODULES = [
+  {
+    id: "pay",
+    emoji: "💳",
+    bg: "#e3effa",
+    tag: "tag-blue",
+    tagKey: "beginner",
+    dur: 15,
+    title: { en:"Digital Payment Basics", hi:"डिजिटल भुगतान मूल बातें", te:"డిజిటల్ చెల్లింపు ప్రాథమికాలు" },
+    desc:  { en:"Learn how digital payments work and stay safe online", hi:"डिजिटल भुगतान कैसे काम करता है और सुरक्षित रहें", te:"డిజిటల్ చెల్లింపులు ఎలా పని చేస్తాయో తెలుసుకోండి" },
+    slides: [
+      {
+        icon:"💳", iconBg:"#e3effa",
+        title:{en:"What is Digital Payment?",hi:"डिजिटल भुगतान क्या है?",te:"డిజిటల్ చెల్లింపు అంటే ఏమిటి?"},
+        body:{
+          en:`Digital payment means sending or receiving money using your <strong>mobile phone or internet</strong> — no physical cash needed!<div class="highlight-box">💡 India processes over <strong>10 billion UPI transactions</strong> per month. Digital payments are the future of business!</div><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Pay using UPI, cards, or mobile wallets like Paytm, PhonePe</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Available 24/7 — no bank branch needed</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Instant transactions, anywhere in India</div></div></div>`,
+          hi:`डिजिटल भुगतान का मतलब है <strong>मोबाइल फोन या इंटरनेट</strong> से पैसे भेजना या पाना — नकद की ज़रूरत नहीं!<div class="highlight-box">💡 भारत में हर महीने <strong>10 अरब से ज़्यादा UPI लेनदेन</strong> होते हैं। डिजिटल भुगतान व्यापार का भविष्य है!</div>`,
+          te:`డిజిటల్ చెల్లింపు అంటే <strong>మొబైల్ ఫోన్ లేదా ఇంటర్నెట్</strong> ద్వారా డబ్బు పంపడం లేదా స్వీకరించడం — నగదు అవసరం లేదు!<div class="highlight-box">💡 భారతదేశంలో నెలకు <strong>10 బిలియన్లకు పైగా UPI లావాదేవీలు</strong> జరుగుతున్నాయి!</div>`
+        }
+      },
+      {
+        icon:"🛡️", iconBg:"#e8f5ee",
+        title:{en:"Staying Safe Online",hi:"ऑनलाइन सुरक्षित रहें",te:"ఆన్‌లైన్‌లో సురక్షితంగా ఉండండి"},
+        body:{
+          en:`<div class="tip-box">⚠️ <strong>NEVER share</strong> your OTP, UPI PIN, or password with anyone — not even if they claim to be from your bank!</div><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Always verify the receiver's UPI ID before paying</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Use only trusted apps: PhonePe, Google Pay, BHIM, Paytm</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Check your balance immediately after every transaction</div></div></div>`,
+          hi:`<div class="tip-box">⚠️ अपना OTP, UPI PIN या पासवर्ड <strong>कभी किसी से साझा न करें</strong> — भले ही वो बैंक से होने का दावा करे!</div>`,
+          te:`<div class="tip-box">⚠️ మీ OTP, UPI PIN లేదా పాస్‌వర్డ్ <strong>ఎవరితోనూ పంచుకోకండి</strong> — వారు బ్యాంక్ నుండి అని చెప్పినా!</div>`
+        }
+      },
+      {
+        icon:"📱", iconBg:"#fff4e0",
+        title:{en:"Your First Digital Payment",hi:"पहला डिजिटल भुगतान",te:"మీ మొదటి డిజిటల్ చెల్లింపు"},
+        body:{
+          en:`<strong>Step-by-step: Send money via UPI</strong><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>Step 1:</strong> Open any UPI app (PhonePe, GPay, BHIM)</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>Step 2:</strong> Tap "Send Money" → Enter UPI ID or phone number</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>Step 3:</strong> Enter amount → Tap "Pay" → Enter your UPI PIN</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>Step 4:</strong> Done! You'll get an SMS confirmation instantly ✓</div></div></div>`,
+          hi:`<strong>चरण-दर-चरण: UPI से पैसे भेजें</strong><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>चरण 1:</strong> कोई UPI ऐप खोलें (PhonePe, GPay, BHIM)</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>चरण 2:</strong> "पैसे भेजें" → UPI ID या फोन नंबर दर्ज करें</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>चरण 3:</strong> राशि दर्ज करें → "भेजें" → UPI PIN डालें</div></div></div>`,
+          te:`<strong>దశల వారీగా: UPI ద్వారా డబ్బు పంపండి</strong><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>దశ 1:</strong> ఏదైనా UPI యాప్ తెరవండి (PhonePe, GPay, BHIM)</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>దశ 2:</strong> "డబ్బు పంపు" → UPI ID లేదా ఫోన్ నంబర్ నమోదు చేయండి</div></div></div>`
+        }
+      }
+    ],
+    quiz: [
+      { q:{en:"What does UPI stand for?",hi:"UPI का पूरा नाम क्या है?",te:"UPI అంటే ఏమిటి?"}, opts:{en:["Unified Payments Interface","Universal Payment Index","United Public Interface","Uniform Payment Integration"],hi:["यूनिफाइड पेमेंट्स इंटरफेस","यूनिवर्सल पेमेंट इंडेक्स","यूनाइटेड पब्लिक इंटरफेस","यूनिफॉर्म पेमेंट इंटीग्रेशन"],te:["Unified Payments Interface","Universal Payment Index","United Public Interface","Uniform Payment Integration"]}, ans:0 },
+      { q:{en:"What should you NEVER share for digital payments?",hi:"डिजिटल भुगतान के लिए क्या कभी साझा नहीं करना चाहिए?",te:"డిజిటల్ చెల్లింపుల కోసం ఏది ఎప్పుడూ పంచుకోకూడదు?"}, opts:{en:["Shop name","Your OTP or UPI PIN","Product photos","Business address"],hi:["दुकान का नाम","अपना OTP या UPI PIN","उत्पाद की तस्वीरें","व्यापार का पता"],te:["దుకాణం పేరు","మీ OTP లేదా UPI PIN","ఉత్పత్తి ఫోటోలు","వ్యాపార చిరునామా"]}, ans:1 },
+      { q:{en:"Which is a trusted UPI payment app in India?",hi:"भारत में कौन सा UPI ऐप भरोसेमंद है?",te:"భారతదేశంలో నమ్మకమైన UPI యాప్ ఏది?"}, opts:{en:["TikTok","PhonePe","WhatsApp","YouTube"],hi:["TikTok","PhonePe","WhatsApp","YouTube"],te:["TikTok","PhonePe","WhatsApp","YouTube"]}, ans:1 }
+    ]
+  },
+  {
+    id: "upi",
+    emoji: "🔵",
+    bg: "#e6f7ed",
+    tag: "tag-green",
+    tagKey: "essential",
+    dur: 20,
+    title: { en:"Using UPI Payments", hi:"UPI भुगतान का उपयोग", te:"UPI చెల్లింపులు వాడటం" },
+    desc:  { en:"Master UPI to send/receive money instantly with your phone", hi:"फ़ोन से तुरंत पैसे भेजें और पाएं", te:"ఫోన్ ద్వారా తక్షణంగా డబ్బు పంపండి" },
+    slides: [
+      {
+        icon:"🔵", iconBg:"#e6f7ed",
+        title:{en:"Setting Up UPI",hi:"UPI सेट करना",te:"UPI సెటప్ చేయడం"},
+        body:{
+          en:`<strong>Getting Started with UPI:</strong><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Download PhonePe, Google Pay, BHIM, or Paytm from Play Store</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Enter your registered <strong>mobile number</strong> (same as bank)</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Verify via OTP → Link your bank account → Create a 4–6 digit UPI PIN</div></div></div><div class="highlight-box">✅ UPI is 100% FREE! No charges to send or receive money.</div>`,
+          hi:`<strong>UPI शुरू करना:</strong><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Play Store से PhonePe, Google Pay, BHIM, या Paytm डाउनलोड करें</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">अपना <strong>रजिस्टर्ड मोबाइल नंबर</strong> डालें (बैंक वाला)</div></div></div><div class="highlight-box">✅ UPI बिल्कुल मुफ़्त है!</div>`,
+          te:`<strong>UPI ప్రారంభించడం:</strong><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Play Store నుండి PhonePe, Google Pay, BHIM, లేదా Paytm డౌన్‌లోడ్ చేయండి</div></div></div><div class="highlight-box">✅ UPI పూర్తిగా ఉచితం!</div>`
+        }
+      },
+      {
+        icon:"📲", iconBg:"#e3effa",
+        title:{en:"Business QR Code",hi:"व्यापार QR कोड",te:"వ్యాపార QR కోడ్"},
+        body:{
+          en:`Generate your own QR code so customers can pay you instantly!<div class="highlight-box">🛍️ Shops using QR payments see <strong>30% more sales</strong> from customers who don't carry cash.</div><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Open your UPI app → Tap "My QR / Receive Money"</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Save or print the QR code and display at your shop</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Money goes directly to your bank — instant notification!</div></div></div>`,
+          hi:`अपना QR कोड बनाएं ताकि ग्राहक तुरंत भुगतान कर सकें!<div class="highlight-box">🛍️ QR भुगतान वाली दुकानों को <strong>30% अधिक बिक्री</strong> मिलती है।</div>`,
+          te:`మీ స్వంత QR కోడ్ రూపొందించండి తద్వారా కస్టమర్లు వెంటనే చెల్లించవచ్చు!<div class="highlight-box">🛍️ QR చెల్లింపులు వాడే దుకాణాలకు <strong>30% ఎక్కువ అమ్మకాలు</strong> వస్తాయి.</div>`
+        }
+      }
+    ],
+    quiz: [
+      { q:{en:"UPI transactions are:",hi:"UPI लेनदेन कैसे होते हैं?",te:"UPI లావాదేవీలు:"}, opts:{en:["Expensive & slow","Free & instant","Requires a credit card","Only for big businesses"],hi:["महंगे और धीमे","मुफ़्त और तुरंत","क्रेडिट कार्ड ज़रूरी","केवल बड़े व्यापार के लिए"],te:["ఖరీదైనవి & నెమ్మది","ఉచిత & తక్షణం","క్రెడిట్ కార్డు అవసరం","పెద్ద వ్యాపారాలకే"]}, ans:1 },
+      { q:{en:"How can a shopkeeper receive payments via UPI?",hi:"दुकानदार UPI से भुगतान कैसे पाएं?",te:"దుకాణదారు UPI ద్వారా చెల్లింపులు ఎలా స్వీకరించాలి?"}, opts:{en:["Share bank account number only","Show a UPI QR code","Only via ATM","Use a POS machine only"],hi:["केवल बैंक नंबर शेयर करें","UPI QR कोड दिखाएं","केवल ATM से","केवल POS मशीन से"],te:["బ్యాంక్ నంబర్ మాత్రమే పంచుకోండి","UPI QR కోడ్ చూపించండి","ATM ద్వారా మాత్రమే","POS మిషన్ ద్వారా మాత్రమే"]}, ans:1 }
+    ]
+  },
+  {
+    id: "ecom",
+    emoji: "🛒",
+    bg: "#fff4e0",
+    tag: "tag-saffron",
+    tagKey: "intermediate",
+    dur: 25,
+    title: { en:"Introduction to E-commerce", hi:"ई-कॉमर्स का परिचय", te:"ఇ-కామర్స్ పరిచయం" },
+    desc:  { en:"Sell your products across India with Meesho & WhatsApp", hi:"मीशो और व्हाट्सएप से पूरे भारत में बेचें", te:"Meesho & WhatsApp ద్వారా భారతదేశం అంతటా అమ్మండి" },
+    slides: [
+      {
+        icon:"🛒", iconBg:"#fff4e0",
+        title:{en:"What is E-commerce?",hi:"ई-कॉमर्स क्या है?",te:"ఇ-కామర్స్ అంటే ఏమిటి?"},
+        body:{
+          en:`E-commerce means <strong>buying and selling products online</strong>. As a rural entrepreneur, you can reach customers across India — right from your home!<div class="highlight-box">🌟 India's e-commerce market will reach <strong>$350 billion by 2030</strong>. There's room for YOU!</div><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>Meesho:</strong> Zero commission, great for clothes & home goods</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>WhatsApp Business:</strong> Perfect for local community selling</div></div><div class="info-item"><div class="info-dot" style="background:var(--saffron)"></div><div class="info-text"><strong>Instagram Shop:</strong> Best for handmade & craft items</div></div></div>`,
+          hi:`ई-कॉमर्स का मतलब है <strong>ऑनलाइन सामान खरीदना और बेचना</strong>। आप घर से ही पूरे भारत में ग्राहकों तक पहुंच सकती हैं!<div class="highlight-box">🌟 भारत का ई-कॉमर्स बाज़ार 2030 तक <strong>$350 अरब</strong> तक पहुंचेगा!</div>`,
+          te:`ఇ-కామర్స్ అంటే <strong>ఆన్‌లైన్‌లో వస్తువులు కొనడం మరియు అమ్మడం</strong>. మీరు ఇంటి నుండే భారతదేశం అంతటా కస్టమర్లను చేరుకోవచ్చు!<div class="highlight-box">🌟 భారతదేశ ఇ-కామర్స్ మార్కెట్ 2030 నాటికి <strong>$350 బిలియన్</strong> చేరుకుంటుంది!</div>`
+        }
+      },
+      {
+        icon:"📸", iconBg:"#e6f7ed",
+        title:{en:"Selling Tips",hi:"बिक्री के टिप्स",te:"అమ్మకాల చిట్కాలు"},
+        body:{
+          en:`<strong>How to get more sales:</strong><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">Take <strong>clear, well-lit photos</strong> of your products — use natural sunlight</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Write <strong>simple descriptions</strong> — size, colour, price, how to use</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Use <strong>WhatsApp Status</strong> to show new products to all your contacts daily</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text">Collect <strong>customer reviews</strong> — good reviews = more buyers</div></div></div><div class="tip-box">💡 Even a basic ₹5,000 smartphone camera is enough to start selling online!</div>`,
+          hi:`<strong>अधिक बिक्री के लिए:</strong><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">उत्पाद की <strong>स्पष्ट, अच्छी रोशनी वाली तस्वीरें</strong> लें</div></div><div class="info-item"><div class="info-dot"></div><div class="info-text"><strong>WhatsApp Status</strong> से रोज़ नए उत्पाद दिखाएं</div></div></div>`,
+          te:`<strong>ఎక్కువ అమ్మకాలు పొందడానికి:</strong><div class="info-list"><div class="info-item"><div class="info-dot"></div><div class="info-text">ఉత్పత్తి <strong>స్పష్టమైన ఫోటోలు</strong> తీయండి — సహజ వెలుతురు వాడండి</div></div></div>`
+        }
+      }
+    ],
+    quiz: [
+      { q:{en:"Which platform is best for selling handmade items?",hi:"हस्तनिर्मित वस्तुएं बेचने के लिए कौन सा प्लेटफ़ॉर्म?",te:"చేతితో తయారుచేసిన వస్తువులు అమ్మడానికి ఏ ప్లాట్‌ఫారమ్?"}, opts:{en:["TikTok","Meesho or Instagram","Stock Market","Job Portal"],hi:["TikTok","मीशो या Instagram","शेयर बाज़ार","जॉब पोर्टल"],te:["TikTok","Meesho లేదా Instagram","స్టాక్ మార్కెట్","జాబ్ పోర్టల్"]}, ans:1 },
+      { q:{en:"Good product photos should be taken in:",hi:"अच्छी उत्पाद तस्वीरें किसमें लेनी चाहिए?",te:"మంచి ఉత్పత్తి ఫోటోలు దేనిలో తీయాలి?"}, opts:{en:["Dark room","Natural sunlight","At night","Underground"],hi:["अंधेरे कमरे में","प्राकृतिक धूप में","रात को","भूमिगत"],te:["చీకటి గదిలో","సహజ సూర్యకాంతిలో","రాత్రి","భూగర్భంలో"]}, ans:1 }
+    ]
+  },
+  {
+    id: "fin",
+    emoji: "💰",
+    bg: "#f3e8ff",
+    tag: "tag-violet",
+    tagKey: "important",
+    dur: 30,
+    title: { en:"Basic Financial Literacy", hi:"बुनियादी वित्तीय साक्षरता", te:"ప్రాథమిక ఆర్థిక అక్షరాస్యత" },
+    desc:  { en:"Manage money, savings & loans to grow your business", hi:"व्यापार बढ़ाने के लिए पैसे, बचत और ऋण प्रबंधित करें", te:"వ్యాపారాన్ని పెంచడానికి డబ్బు, పొదుపు & రుణాలు నిర్వహించండి" },
+    slides: [
+      {
+        icon:"💰", iconBg:"#f3e8ff",
+        title:{en:"Managing Business Money",hi:"व्यापार का पैसा संभालें",te:"వ్యాపార డబ్బు నిర్వహించండి"},
+        body:{
+          en:`<div class="highlight-box">💡 Keep your <strong>business money separate</strong> from personal money. Open a dedicated bank account!</div><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--violet)"></div><div class="info-text">Track every <strong>income and expense</strong> in a notebook or free app like Vyapar</div></div><div class="info-item"><div class="info-dot" style="background:var(--violet)"></div><div class="info-text">Calculate your <strong>profit = Income − Expenses</strong> every week</div></div><div class="info-item"><div class="info-dot" style="background:var(--violet)"></div><div class="info-text">Save <strong>at least 10%</strong> of monthly profit for business growth</div></div></div>`,
+          hi:`<div class="highlight-box">💡 <strong>व्यापार का पैसा</strong> और निजी पैसा अलग रखें। एक अलग बैंक खाता खोलें!</div><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--violet)"></div><div class="info-text">हर <strong>आय और खर्च</strong> एक नोटबुक में लिखें</div></div></div>`,
+          te:`<div class="highlight-box">💡 <strong>వ్యాపార డబ్బు</strong> మరియు వ్యక్తిగత డబ్బు వేరు ఉంచండి. ప్రత్యేక బ్యాంక్ ఖాతా తెరవండి!</div>`
+        }
+      },
+      {
+        icon:"🏦", iconBg:"#e3effa",
+        title:{en:"Government Loans & Schemes",hi:"सरकारी ऋण और योजनाएं",te:"ప్రభుత్వ రుణాలు & పథకాలు"},
+        body:{
+          en:`<strong>Free money & easy loans for women entrepreneurs:</strong><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>Mudra Loan:</strong> Up to ₹10 lakh, no collateral needed, for small businesses</div></div><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>PM Vishwakarma:</strong> ₹1–3 lakh at 5% interest for artisans & crafts</div></div><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>SHG Bank Linkage:</strong> Credit via Self Help Groups at village level</div></div><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>PMEGP Scheme:</strong> 15–35% subsidy on new business loans</div></div></div><div class="tip-box">💡 Saving just ₹50/day = <strong>₹18,250 per year</strong> — enough to start a new product line!</div>`,
+          hi:`<strong>महिला उद्यमियों के लिए आसान ऋण:</strong><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>मुद्रा लोन:</strong> ₹10 लाख तक, बिना गिरवी के</div></div><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>PMEGP:</strong> नए व्यापार पर 15–35% सब्सिडी</div></div></div>`,
+          te:`<strong>మహిళా వ్యవస్థాపకులకు సులభమైన రుణాలు:</strong><div class="info-list"><div class="info-item"><div class="info-dot" style="background:var(--blue-2)"></div><div class="info-text"><strong>ముద్ర లోన్:</strong> ₹10 లక్షల వరకు, తనఖా లేకుండా</div></div></div>`
+        }
+      }
+    ],
+    quiz: [
+      { q:{en:"You should keep business money:",hi:"व्यापार का पैसा रखना चाहिए:",te:"వ్యాపార డబ్బు ఉంచాలి:"}, opts:{en:["Mixed with personal money","In a separate bank account","Under the mattress","Only in cash"],hi:["निजी पैसे के साथ","अलग बैंक खाते में","गद्दे के नीचे","केवल नकद में"],te:["వ్యక్తిగత డబ్బుతో కలిపి","వేరే బ్యాంక్ ఖాతాలో","మంచం కింద","నగదులో మాత్రమే"]}, ans:1 },
+      { q:{en:"The Mudra Loan provides up to:",hi:"मुद्रा लोन कितने तक देता है?",te:"ముద్ర లోన్ ఎంత వరకు ఇస్తుంది?"}, opts:{en:["₹500","₹50,000","₹10,00,000 (₹10 lakh)","₹1 crore"],hi:["₹500","₹50,000","₹10,00,000 (₹10 लाख)","₹1 करोड़"],te:["₹500","₹50,000","₹10,00,000 (₹10 లక్షలు)","₹1 కోటి"]}, ans:2 },
+      { q:{en:"Saving ₹50 per day in a year gives you approximately:",hi:"रोज ₹50 बचाने से एक साल में लगभग कितना मिलता है?",te:"రోజుకు ₹50 పొదుపు సంవత్సరానికి సుమారు ఎంత ఇస్తుంది?"}, opts:{en:["₹1,000","₹5,000","₹18,000","₹1 lakh"],hi:["₹1,000","₹5,000","₹18,000","₹1 लाख"],te:["₹1,000","₹5,000","₹18,000","₹1 లక్ష"]}, ans:2 }
+    ]
+  }
+];
+
+/* ============================================================
+   APP STATE
+============================================================ */
+const S = {
+  lang: 'en',
+  selected_lang: 'en',
+  completed: [],          // module ids
+  quizHistory: [],        // [{modId, score, total}]
+  currentMod: null,       // module id
+  lessonSlide: 0,
+  quizQ: 0,
+  quizAnswers: [],
+  quizAnswered: false,
+  streak: 1,
+  _recId: null,
+};
+
+/* ============================================================
+   LANGUAGE SELECTION
+============================================================ */
+function selectLang(lang) {
+  S.selected_lang = lang;
+  ['en','hi','te'].forEach(l => {
+    const el = document.getElementById('lc-' + l);
+    if (el) { el.classList.toggle('sel', l === lang); el.setAttribute('aria-pressed', l === lang); }
+  });
+  const labels = { en:'Begin Learning →', hi:'सीखना शुरू करें →', te:'నేర్చుకోవడం ప్రారంభించండి →' };
+  document.getElementById('lang-start-btn').textContent = labels[lang] || labels.en;
+}
+
+function launchApp() {
+  S.lang = S.selected_lang;
+  document.getElementById('s-lang').classList.remove('active');
+  const app = document.getElementById('s-app');
+  app.style.display = 'flex';
+  app.classList.add('active');
+  applyAllTranslations();
+  renderHome();
+  renderDash();
+  toast(t('greeting') + ' Priya! 🙏', 'success');
+}
+
+/* ============================================================
+   CYCLE LANGUAGE (from top nav)
+============================================================ */
+function cycleLang() {
+  const langs = ['en','hi','te'];
+  const indicators = { en:'EN', hi:'हि', te:'తె' };
+  const idx = langs.indexOf(S.lang);
+  S.lang = langs[(idx + 1) % langs.length];
+  document.getElementById('lang-pill-txt').textContent = indicators[S.lang];
+  applyAllTranslations();
+  renderHome();
+  renderCurrentPanel();
+  toast({ en:'Language updated!', hi:'भाषा बदल दी!', te:'భాష మార్చబడింది!' }[S.lang], 'info');
+}
+
+function applyAllTranslations() {
+  const indicators = { en:'EN', hi:'हि', te:'తె' };
+  const el = document.getElementById('lang-pill-txt');
+  if (el) el.textContent = indicators[S.lang];
+  // nav tabs
+  ['home','quiz','progress','dash'].forEach(k => {
+    const el = document.getElementById('tabl-' + k);
+    if (el) el.textContent = t('tab_' + k);
+  });
+  // dashboard static
+  document.getElementById('dash-title').textContent = t('dash_title');
+  document.getElementById('dash-sub').textContent = t('dash_sub');
+  document.getElementById('dash-live-badge').textContent = t('dash_live');
+  document.getElementById('kpi-enrolled-lbl').textContent = t('kpi_enrolled');
+  document.getElementById('kpi-mods-lbl').textContent = t('kpi_mods');
+  document.getElementById('kpi-score-lbl').textContent = t('kpi_score');
+  document.getElementById('kpi-rate-lbl').textContent = t('kpi_rate');
+  document.getElementById('chart-mod-title').textContent = t('chart_mod');
+  document.getElementById('chart-ring-title').textContent = t('chart_ring');
+  document.getElementById('dash-activity-title').textContent = t('activity_title');
+  document.getElementById('access-title').textContent = t('access_title');
+  // progress
+  document.getElementById('prog-panel-title').textContent = t('prog_panel');
+  document.getElementById('prog-ov-lbl').textContent = t('overall_comp');
+  document.getElementById('pstat-done-lbl').textContent = t('completed');
+  document.getElementById('pstat-left-lbl').textContent = t('remaining');
+  document.getElementById('pstat-score-lbl').textContent = t('best_score');
+  document.getElementById('mod-prog-title').textContent = t('mod_details');
+  document.getElementById('badges-title').textContent = t('achievements');
+  document.getElementById('qhist-title').textContent = t('quiz_history');
+  const qhe = document.getElementById('qhist-empty');
+  if (qhe) qhe.textContent = t('no_quiz');
+}
+
+function renderCurrentPanel() {
+  const panels = ['home','lesson','quiz','progress','dash'];
+  for (const p of panels) {
+    if (document.getElementById('panel-' + p)?.classList.contains('active')) {
+      if (p === 'progress') renderProgress();
+      else if (p === 'dash') renderDash();
+      break;
+    }
+  }
+}
+
+/* ============================================================
+   PANEL NAVIGATION
+============================================================ */
+function gotoPanel(name) {
+  document.querySelectorAll('#s-app .panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('panel-' + name);
+  if (panel) { panel.classList.add('active'); panel.classList.add('anim-fade-in'); setTimeout(() => panel.classList.remove('anim-fade-in'), 400); }
+  document.querySelectorAll('.tab-btn').forEach(b => { b.classList.remove('active'); b.removeAttribute('aria-current'); });
+  const tab = document.getElementById('tab-' + name);
+  if (tab) { tab.classList.add('active'); tab.setAttribute('aria-current','page'); }
+  document.getElementById('scroll-area').scrollTop = 0;
+  if (name === 'progress') renderProgress();
+  if (name === 'dash') renderDash();
+}
+
+/* ============================================================
+   RENDER HOME
+============================================================ */
+function renderHome() {
+  const total = MODULES.length;
+  const done = S.completed.length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  document.getElementById('h-greeting').textContent = t('greeting');
+  document.getElementById('h-prog-lbl').textContent = t('prog_label');
+  document.getElementById('hero-bar-fill').style.width = pct + '%';
+  document.getElementById('hero-progbar').setAttribute('aria-valuenow', pct);
+  document.getElementById('hero-pct').textContent = pct + '% ' + t('complete');
+  document.getElementById('hs-done').textContent = done;
+  document.getElementById('hs-done-lbl').textContent = t('modules_done');
+  document.getElementById('hs-streak').textContent = S.streak;
+  document.getElementById('hs-streak-lbl').textContent = t('day_streak');
+  document.getElementById('hs-quiz-lbl').textContent = t('quiz_score');
+  const bestScore = S.quizHistory.length > 0
+    ? Math.max(...S.quizHistory.map(q => Math.round((q.score / q.total) * 100))) + '%'
+    : '—';
+  document.getElementById('hs-quiz').textContent = bestScore;
+
+  document.getElementById('mods-sec-title').textContent = t('modules_title');
+  document.getElementById('see-all-btn').textContent = t('see_all');
+
+  updateRecommendation();
+  renderModGrid();
+}
+
+function renderModGrid() {
+  const grid = document.getElementById('mod-grid');
+  grid.innerHTML = '';
+  MODULES.forEach((mod, i) => {
+    const done = S.completed.includes(mod.id);
+    const card = document.createElement('div');
+    card.className = 'mod-card anim-fade-up d' + Math.min(i + 2, 6);
+    card.setAttribute('role', 'listitem');
+    card.setAttribute('aria-label', (mod.title[S.lang] || mod.title.en));
+    card.innerHTML = `
+      <div class="mod-card-icon" style="background:${mod.bg}" aria-hidden="true">${mod.emoji}</div>
+      <div class="mod-card-body">
+        <div class="mod-card-title">${mod.title[S.lang] || mod.title.en}</div>
+        <div class="mod-card-desc">${mod.desc[S.lang] || mod.desc.en}</div>
+        <div class="mod-card-meta">
+          <span class="tag ${mod.tag}">${t(mod.tagKey)}</span>
+          <span class="tag tag-teal">${mod.dur} ${t('min')}</span>
+        </div>
+      </div>
+      ${done
+        ? `<div class="mod-done-badge" aria-label="Completed"><svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7l3.5 3.5 5.5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`
+        : `<div class="mod-next-badge" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M7 5l5 4-5 4" stroke="#8896a5" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>`
+      }
+    `;
+    card.onclick = () => openLesson(mod.id);
+    grid.appendChild(card);
+  });
+}
+
+function updateRecommendation() {
+  const recSec = document.getElementById('rec-section');
+  const recSecTitle = document.getElementById('rec-sec-title');
+  const recBadge = document.getElementById('rec-badge');
+  const recSub = document.getElementById('rec-sub');
+  recSecTitle.textContent = t('recommended');
+  recBadge.textContent = t('ai_badge');
+  recSub.textContent = t('based_progress');
+
+  let rec = null;
+  // AI logic: if quiz taken, low score → repeat, high score → next
+  if (S.quizHistory.length > 0) {
+    const last = S.quizHistory[S.quizHistory.length - 1];
+    const pct = (last.score / last.total) * 100;
+    if (pct < 50) {
+      rec = MODULES.find(m => m.id === last.modId);
+      document.getElementById('rec-icon').textContent = '🔄';
+      document.getElementById('rec-badge').textContent = t('repeat_lesson');
+    } else {
+      const notDone = MODULES.filter(m => !S.completed.includes(m.id));
+      rec = notDone[0] || null;
+      document.getElementById('rec-icon').textContent = '⭐';
+      document.getElementById('rec-badge').textContent = t('ai_badge');
+    }
+  } else {
+    const notDone = MODULES.filter(m => !S.completed.includes(m.id));
+    rec = notDone[0] || null;
+  }
+
+  if (rec) {
+    S._recId = rec.id;
+    document.getElementById('rec-title').textContent = rec.title[S.lang] || rec.title.en;
+    recSec.classList.remove('hidden');
+  } else {
+    recSec.classList.add('hidden');
+  }
+}
+
+function openRecommended() {
+  if (S._recId) openLesson(S._recId);
+}
+
+/* ============================================================
+   LESSON
+============================================================ */
+function openLesson(modId) {
+  const mod = MODULES.find(m => m.id === modId);
+  if (!mod) return;
+  S.currentMod = modId;
+  S.lessonSlide = 0;
+  renderLesson();
+  gotoPanel('lesson');
+}
+
+function backFromLesson() {
+  gotoPanel('home');
+}
+
+function renderLesson() {
+  const mod = MODULES.find(m => m.id === S.currentMod);
+  if (!mod) return;
+  const slides = mod.slides;
+  const i = S.lessonSlide;
+  const total = slides.length;
+  const slide = slides[i];
+
+  document.getElementById('lesson-title').textContent = mod.title[S.lang] || mod.title.en;
+  document.getElementById('lesson-prog-pill').textContent = (i + 1) + '/' + total;
+
+  // Stepper
+  const stepper = document.getElementById('lesson-stepper');
+  stepper.innerHTML = slides.map((_, j) =>
+    `<div class="stepper-dot ${j < i ? 'done' : j === i ? 'active' : ''}" aria-hidden="true"></div>`
+  ).join('');
+
+  // Slide body
+  const isDone = S.completed.includes(S.currentMod);
+  const isLast = i === total - 1;
+
+  document.getElementById('lesson-body').innerHTML = `
+    <div class="lesson-slide anim-slide-r">
+      <div class="slide-icon-wrap" style="background:${slide.iconBg}" aria-hidden="true">${slide.icon}</div>
+      <div class="slide-step-label">STEP ${i + 1} OF ${total}</div>
+      <div class="slide-h">${slide.title[S.lang] || slide.title.en}</div>
+      <div class="slide-body">${slide.body[S.lang] || slide.body.en}</div>
+    </div>
+    <div class="lesson-nav">
+      ${i > 0 ? `<button class="btn-secondary" onclick="slideNav(-1)">${t('prev')}</button>` : ''}
+      ${!isLast
+        ? `<button class="btn-primary" onclick="slideNav(1)">${t('next_slide')}</button>`
+        : `
+          <button class="btn-primary" id="mark-done-btn" onclick="markDone('${S.currentMod}')" ${isDone ? 'disabled style="background:var(--green-2)"' : ''}>
+            ${isDone ? t('already_done') : t('mark_done')}
+          </button>
+          <button class="btn-ghost" onclick="startQuiz('${S.currentMod}')">${t('take_quiz')}</button>
+        `
+      }
+    </div>
+  `;
+}
+
+function slideNav(dir) {
+  const mod = MODULES.find(m => m.id === S.currentMod);
+  S.lessonSlide = Math.max(0, Math.min(mod.slides.length - 1, S.lessonSlide + dir));
+  renderLesson();
+}
+
+function markDone(modId) {
+  if (!S.completed.includes(modId)) {
+    S.completed.push(modId);
+  }
+  const btn = document.getElementById('mark-done-btn');
+  if (btn) { btn.textContent = t('already_done'); btn.disabled = true; }
+  updateHeroProgress();
+  updateRecommendation();
+  renderModGrid();
+  document.getElementById('quiz-dot').classList.add('show');
+  toast({ en:'🎉 Module completed!', hi:'🎉 मॉड्यूल पूर्ण!', te:'🎉 మాడ్యూల్ పూర్తయింది!' }[S.lang], 'success');
+}
+
+function updateHeroProgress() {
+  const total = MODULES.length;
+  const done = S.completed.length;
+  const pct = Math.round((done / total) * 100);
+  const fill = document.getElementById('hero-bar-fill');
+  if (fill) { fill.style.width = pct + '%'; }
+  const pctEl = document.getElementById('hero-pct');
+  if (pctEl) pctEl.textContent = pct + '% ' + t('complete');
+  const hsDone = document.getElementById('hs-done');
+  if (hsDone) hsDone.textContent = done;
+}
+
+/* ============================================================
+   QUIZ
+============================================================ */
+function startQuiz(modId) {
+  if (!modId) {
+    // Start quiz for first incomplete module
+    const notDone = MODULES.filter(m => !S.completed.includes(m.id));
+    modId = notDone.length > 0 ? notDone[0].id : MODULES[0].id;
+  }
+  S.currentMod = modId;
+  S.quizQ = 0;
+  S.quizAnswers = [];
+  S.quizAnswered = false;
+  document.getElementById('quiz-dot').classList.remove('show');
+  renderQuizQuestion();
+  gotoPanel('quiz');
+}
+
+function startQuizFromNav() {
+  startQuiz(null);
+}
+
+function renderQuizQuestion() {
+  const mod = MODULES.find(m => m.id === S.currentMod);
+  const qs = mod.quiz;
+  const qi = S.quizQ;
+  const q = qs[qi];
+  const total = qs.length;
+  const pct = Math.round(((qi + 1) / total) * 100);
+  const answered = S.quizAnswers[qi] !== undefined;
+
+  const opts = (q.opts[S.lang] || q.opts.en).map((opt, oi) => {
+    let cls = 'q-opt';
+    let letter = String.fromCharCode(65 + oi);
+    if (answered) {
+      if (oi === q.ans) cls += ' correct';
+      else if (S.quizAnswers[qi] === oi) cls += ' wrong';
+    } else if (S.quizAnswers[qi] === oi) cls += ' chosen';
+    return `
+      <button class="${cls}" onclick="answerQ(${oi})" ${answered ? 'disabled' : ''} aria-label="Option ${letter}: ${opt}">
+        <div class="opt-letter" aria-hidden="true">${letter}</div>
+        ${opt}
+      </button>`;
+  }).join('');
+
+  let feedback = '';
+  if (answered) {
+    const correct = S.quizAnswers[qi] === q.ans;
+    feedback = `<div class="feedback-row ${correct ? 'correct' : 'wrong'}" role="alert">${correct ? t('feedback_correct') : t('feedback_wrong')}</div>`;
+  }
+
+  const isLast = qi === total - 1;
+
+  document.getElementById('panel-quiz').innerHTML = `
+    <div class="quiz-wrapper">
+      <div class="quiz-header-card anim-fade-up d1">
+        <div class="quiz-h-title">${t('knowledge_quiz') || mod.title[S.lang] || mod.title.en} — Quiz</div>
+        <div class="quiz-h-sub">${mod.title[S.lang] || mod.title.en}</div>
+        <div class="quiz-prog-row">
+          <div class="quiz-prog-bg"><div class="quiz-prog-fill" style="width:${pct}%"></div></div>
+          <div class="quiz-q-num">${qi + 1}/${total}</div>
+        </div>
+      </div>
+      <div class="q-card anim-fade-up d2">
+        <div class="q-label">QUESTION ${qi + 1}</div>
+        <div class="q-text">${q.q[S.lang] || q.q.en}</div>
+        <div class="q-options" role="group" aria-label="Answer options">${opts}</div>
+        ${feedback}
+      </div>
+      <div class="quiz-nav anim-fade-up d3">
+        ${qi > 0 ? `<button class="btn-secondary" onclick="quizNav(-1)">${t('prev')}</button>` : ''}
+        ${!isLast
+          ? `<button class="btn-quiz-next" onclick="quizNav(1)" ${!answered ? 'disabled' : ''}>${t('next_q')}</button>`
+          : `<button class="btn-quiz-next" onclick="submitQuiz()" ${!answered ? 'disabled' : ''}>${t('submit_quiz')}</button>`
+        }
+      </div>
+    </div>`;
+}
+
+function answerQ(oi) {
+  if (S.quizAnswers[S.quizQ] !== undefined) return;
+  S.quizAnswers[S.quizQ] = oi;
+  renderQuizQuestion();
+}
+
+function quizNav(dir) {
+  S.quizQ = Math.max(0, S.quizQ + dir);
+  renderQuizQuestion();
+}
+
+function submitQuiz() {
+  const mod = MODULES.find(m => m.id === S.currentMod);
+  const qs = mod.quiz;
+  let correct = 0;
+  S.quizAnswers.forEach((ans, i) => { if (qs[i] && ans === qs[i].ans) correct++; });
+  const total = qs.length;
+  const pct = Math.round((correct / total) * 100);
+
+  S.quizHistory.push({ modId: S.currentMod, score: correct, total });
+  updateRecommendation();
+
+  // Score card
+  let verdict, msg, emoji;
+  if (pct >= 80) { verdict = t('well_done'); msg = t('score_high'); emoji = '🎉'; }
+  else if (pct >= 50) { verdict = t('keep_going'); msg = t('score_mid'); emoji = '💪'; }
+  else { verdict = t('try_again'); msg = t('score_low'); emoji = '📚'; }
+
+  // Recommended
+  let recHtml = '';
+  const notDone = MODULES.filter(m => !S.completed.includes(m.id) && m.id !== S.currentMod);
+  if (pct < 50) {
+    const repeat = mod;
+    recHtml = `<div class="score-rec-block">
+      <div class="score-rec-icon">🔄</div>
+      <div><div class="score-rec-lbl">${t('repeat_lesson')}</div><div class="score-rec-title">${repeat.title[S.lang] || repeat.title.en}</div></div>
+    </div>`;
+  } else if (notDone.length > 0) {
+    const next = notDone[0];
+    recHtml = `<div class="score-rec-block" role="button" tabindex="0" onclick="openLesson('${next.id}')" style="cursor:pointer">
+      <div class="score-rec-icon">${next.emoji}</div>
+      <div><div class="score-rec-lbl">${t('next_lesson')}</div><div class="score-rec-title">${next.title[S.lang] || next.title.en}</div></div>
+    </div>`;
+  }
+
+  // SVG ring
+  const r = 52, circ = 2 * Math.PI * r;
+  const dash = (pct / 100) * circ;
+  const ringColor = pct >= 70 ? 'var(--green)' : pct >= 50 ? 'var(--saffron-2)' : 'var(--rose)';
+
+  document.getElementById('panel-quiz').innerHTML = `
+    <div class="score-screen">
+      <div class="score-card anim-pop">
+        <div class="score-ring-wrap">
+          <svg width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+            <circle cx="60" cy="60" r="${r}" fill="none" stroke="var(--bg)" stroke-width="12"/>
+            <circle cx="60" cy="60" r="${r}" fill="none" stroke="${ringColor}" stroke-width="12"
+              stroke-dasharray="${dash} ${circ}" stroke-linecap="round"/>
+          </svg>
+          <div class="score-ring-center">
+            <div class="score-num" style="color:${ringColor}">${correct}</div>
+            <div class="score-of">of ${total}</div>
+          </div>
+        </div>
+        <div class="score-emoji" aria-hidden="true">${emoji}</div>
+        <div class="score-verdict">${verdict}</div>
+        <div class="score-message">${msg}</div>
+        <div class="score-detail-row">
+          <div class="score-detail">
+            <div class="score-detail-num" style="color:${ringColor}">${pct}%</div>
+            <div class="score-detail-lbl">Score</div>
+          </div>
+          <div class="score-detail">
+            <div class="score-detail-num" style="color:var(--green)">${correct}</div>
+            <div class="score-detail-lbl">Correct</div>
+          </div>
+          <div class="score-detail">
+            <div class="score-detail-num" style="color:var(--rose)">${total - correct}</div>
+            <div class="score-detail-lbl">Wrong</div>
+          </div>
+        </div>
+        ${recHtml}
+        <div class="score-btns">
+          <button class="btn-retake" onclick="startQuiz('${S.currentMod}')">${t('retake')}</button>
+          <button class="btn-home" onclick="gotoPanel('home')">${t('go_home')}</button>
+        </div>
+      </div>
+    </div>`;
+  toast(`Quiz complete — ${pct}%! ${emoji}`, pct >= 50 ? 'success' : 'info');
+}
+
+/* ============================================================
+   PROGRESS PANEL
+============================================================ */
+function renderProgress() {
+  const total = MODULES.length;
+  const done = S.completed.length;
+  const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+
+  document.getElementById('prog-ov-pct').textContent = pct + '%';
+  document.getElementById('prog-big-fill').style.width = pct + '%';
+  document.getElementById('prog-bigbar').setAttribute('aria-valuenow', pct);
+  document.getElementById('pstat-done').textContent = done;
+  document.getElementById('pstat-left').textContent = total - done;
+  const bestScore = S.quizHistory.length > 0
+    ? Math.max(...S.quizHistory.map(q => Math.round((q.score / q.total) * 100))) + '%'
+    : '—';
+  document.getElementById('pstat-score').textContent = bestScore;
+
+  // Module progress list
+  const list = document.getElementById('mod-prog-list');
+  list.innerHTML = '';
+  MODULES.forEach(mod => {
+    const isDone = S.completed.includes(mod.id);
+    const fillColor = isDone ? 'var(--green)' : 'var(--ink-pale)';
+    const fillW = isDone ? 100 : 0;
+    const statusColor = isDone ? 'var(--green)' : 'var(--ink-soft)';
+    list.innerHTML += `
+      <div class="mod-prog-row">
+        <div class="mprog-icon" style="background:${mod.bg}" aria-hidden="true">${mod.emoji}</div>
+        <div class="mprog-body">
+          <div class="mprog-name">${mod.title[S.lang] || mod.title.en}</div>
+          <div class="mprog-bar-bg" role="progressbar" aria-valuenow="${fillW}" aria-valuemin="0" aria-valuemax="100">
+            <div class="mprog-bar-fill" style="width:${fillW}%;background:${fillColor}"></div>
+          </div>
+        </div>
+        <div class="mprog-status" style="color:${statusColor}">${isDone ? t('completed') : '...'}</div>
+      </div>`;
+  });
+
+  // Badges
+  const badges = [
+    { emoji:'🌱', key:'badge_first', earned: done >= 1 },
+    { emoji:'⚡', key:'badge_half',  earned: done >= 2 },
+    { emoji:'🏆', key:'badge_all',   earned: done >= 4 },
+    { emoji:'⭐', key:'badge_quiz',  earned: S.quizHistory.some(q => q.score / q.total >= 0.8) },
+    { emoji:'🔥', key:'badge_first', earned: S.streak >= 3 },
+    { emoji:'🚀', key:'badge_half',  earned: done >= 3 },
+  ];
+  const bg = document.getElementById('badges-grid');
+  bg.innerHTML = '';
+  badges.forEach(b => {
+    bg.innerHTML += `
+      <div class="badge-card ${b.earned ? 'earned' : 'locked'}">
+        <div class="badge-emoji" aria-hidden="true">${b.emoji}</div>
+        <div class="badge-name">${t(b.key)}</div>
+        <div class="badge-sub">${b.earned ? t('badge_earned') : t('badge_locked')}</div>
+      </div>`;
+  });
+
+  // Quiz history
+  const qhl = document.getElementById('quiz-hist-list');
+  if (S.quizHistory.length === 0) {
+    qhl.innerHTML = `<div style="text-align:center;padding:20px;color:var(--ink-soft);font-size:13px;">${t('no_quiz')}</div>`;
+  } else {
+    qhl.innerHTML = '';
+    S.quizHistory.slice().reverse().forEach(qh => {
+      const mod = MODULES.find(m => m.id === qh.modId);
+      const pct = Math.round((qh.score / qh.total) * 100);
+      const pillCls = pct >= 70 ? 'hi' : pct >= 50 ? 'md' : 'lo';
+      qhl.innerHTML += `
+        <div class="qh-row">
+          <div class="qh-icon" aria-hidden="true">${mod ? mod.emoji : '📝'}</div>
+          <div class="qh-name">${mod ? (mod.title[S.lang] || mod.title.en) : qh.modId}</div>
+          <div class="qh-pill ${pillCls}" aria-label="${pct}% score">${pct}%</div>
+        </div>`;
+    });
+  }
+}
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+function renderDash() {
+  // Bar chart
+  const data = [
+    { lbl: { en:'Payments', hi:'भुगतान', te:'చెల్లింపు' }, pct: 80, color:'var(--green)' },
+    { lbl: { en:'UPI',      hi:'UPI',    te:'UPI' },        pct: 73, color:'var(--teal-2)' },
+    { lbl: { en:'E-comm.',  hi:'ई-कॉम्.', te:'ఇ-కామ్.' },  pct: 58, color:'var(--saffron-2)' },
+    { lbl: { en:'Finance',  hi:'वित्त',  te:'ఫైనాన్స్' },  pct: 44, color:'var(--violet)' },
+  ];
+  const bc = document.getElementById('bar-chart-mods');
+  bc.innerHTML = data.map(d => `
+    <div class="bar-row">
+      <div class="bar-lbl">${d.lbl[S.lang] || d.lbl.en}</div>
+      <div class="bar-track"><div class="bar-fill" style="width:${d.pct}%;background:${d.color}"></div></div>
+      <div class="bar-val">${d.pct}%</div>
+    </div>`).join('');
+
+  // Rings
+  const rings = [
+    { pct:63, color:'var(--green)',    key:'ring_comp' },
+    { pct:23, color:'var(--saffron-2)',key:'ring_prog' },
+    { pct:14, color:'var(--ink-pale)', key:'ring_none' },
+  ];
+  const rr = document.getElementById('rings-row');
+  rr.innerHTML = rings.map(r => {
+    const radius = 30, circ = 2 * Math.PI * radius;
+    const dash = (r.pct / 100) * circ;
+    return `
+      <div class="ring-item">
+        <svg width="72" height="72" viewBox="0 0 72 72" aria-hidden="true">
+          <circle cx="36" cy="36" r="${radius}" fill="none" stroke="var(--bg)" stroke-width="7"/>
+          <circle cx="36" cy="36" r="${radius}" fill="none" stroke="${r.color}" stroke-width="7"
+            stroke-dasharray="${dash} ${circ}" stroke-linecap="round"/>
+          <text x="36" y="40" text-anchor="middle" font-size="11" font-weight="800" fill="var(--ink)" font-family="Baloo 2,sans-serif">${r.pct}%</text>
+        </svg>
+        <div class="ring-label">${t(r.key)}</div>
+      </div>`;
+  }).join('');
+
+  // Recent activity
+  const acts = [
+    { name:'Priya S.',  detail:{ en:'Completed Digital Payments', hi:'डिजिटल भुगतान पूर्ण', te:'డిజిటల్ చెల్లింపు పూర్తి' }, score:90, hi:true },
+    { name:'Anita R.',  detail:{ en:'Scored 80% on UPI Quiz',     hi:'UPI क्विज़ में 80%',    te:'UPI క్విజ్‌లో 80%' },          score:80, hi:true },
+    { name:'Kavita M.', detail:{ en:'Started E-commerce Module',  hi:'ई-कॉमर्स मॉड्यूल शुरू', te:'ఇ-కామర్స్ మాడ్యూల్ ప్రారంభించారు' }, score:60, hi:false },
+    { name:'Sunita D.', detail:{ en:'Retook Financial Literacy Quiz', hi:'वित्त क्विज़ दोबारा दी', te:'ఆర్థిక క్విజ్ మళ్ళీ చేసారు' }, score:50, hi:false },
+    { name:'Latha V.',  detail:{ en:'Enrolled on platform',       hi:'प्लेटफॉर्म में नामांकित', te:'ప్లాట్‌ఫారమ్‌లో నమోదయ్యారు' }, score:null, hi:false },
+  ];
+  const al = document.getElementById('activity-list');
+  al.innerHTML = acts.map(a => {
+    const scoreHtml = a.score !== null
+      ? `<div class="act-score" style="background:${a.hi?'var(--green-3)':'var(--rose-3)'};color:${a.hi?'var(--green)':'var(--rose)'}">${a.score}%</div>`
+      : `<div class="act-score" style="background:var(--bg);color:var(--ink-soft)">New</div>`;
+    return `
+      <div class="activity-row">
+        <div class="act-avatar" aria-hidden="true">${a.name[0]}</div>
+        <div class="act-body">
+          <div class="act-name">${a.name}</div>
+          <div class="act-detail">${a.detail[S.lang] || a.detail.en}</div>
+        </div>
+        ${scoreHtml}
+      </div>`;
+  }).join('');
+
+  // Accessibility features
+  const features = [
+    { icon:'🔤', text:{ en:'Large text & icons for readability', hi:'बड़े टेक्स्ट और आइकन', te:'పెద్ద వచనం & చిహ్నాలు' } },
+    { icon:'📱', text:{ en:'Mobile-first design for all devices', hi:'मोबाइल-फर्स्ट डिज़ाइन', te:'మొబైల్-ఫస్ట్ డిజైన్' } },
+    { icon:'🌐', text:{ en:'3 languages: EN, HI, TE', hi:'3 भाषाएं: EN, HI, TE', te:'3 భాషలు: EN, HI, TE' } },
+    { icon:'📶', text:{ en:'Low-bandwidth: no heavy images', hi:'कम बैंडविड्थ डिज़ाइन', te:'తక్కువ బ్యాండ్‌విడ్త్' } },
+    { icon:'♿', text:{ en:'ARIA labels for screen readers', hi:'स्क्रीन रीडर सपोर्ट', te:'స్క్రీన్ రీడర్ సపోర్ట్' } },
+    { icon:'👆', text:{ en:'Large tap targets (48px+)', hi:'बड़े टच बटन', te:'పెద్ద టచ్ బటన్లు' } },
+  ];
+  const ag = document.getElementById('access-grid');
+  ag.innerHTML = features.map(f => `
+    <div class="access-item">
+      <div class="access-icon" style="background:var(--green-3)" aria-hidden="true">${f.icon}</div>
+      <div class="access-text">${f.text[S.lang] || f.text.en}</div>
+    </div>`).join('');
+}
+
+/* ============================================================
+   TOAST
+============================================================ */
+function toast(msg, type = '') {
+  const t = document.getElementById('toaster');
+  const el = document.createElement('div');
+  el.className = 'toast' + (type ? ' ' + type : '');
+  el.textContent = msg;
+  el.setAttribute('role', 'status');
+  t.appendChild(el);
+  setTimeout(() => {
+    el.style.opacity = '0';
+    el.style.transition = 'opacity .3s';
+    setTimeout(() => el.remove(), 300);
+  }, 2600);
+}
+
+/* ============================================================
+   INIT
+============================================================ */
+window.addEventListener('load', () => {
+  // pre-populate bar chart and rings on load
+  renderDash();
+});
+</script>
+</body>
+</html>
